@@ -17,6 +17,7 @@ function App() {
   const [state, setState] = useState(() => loadState());
   const [arg, setArg] = useState(null);
   const [langOpen, setLangOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const lang = state.lang || 'en';
 
   useEffect(() => {
@@ -28,6 +29,7 @@ function App() {
   const setRoute = useCallback((id, a = null) => {
     setArg(a);
     setState(s => ({ ...s, route: id }));
+    setSidebarOpen(false);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }, []);
   const toggleTheme = () => setState(s => ({ ...s, theme: s.theme==='dark'?'light':'dark' }));
@@ -40,7 +42,8 @@ function App() {
   const route = state.route;
 
   return (
-    <div className="app">
+    <div className={`app${sidebarOpen ? ' sidebar-is-open' : ''}`}>
+      {sidebarOpen && <div className="sidebar-overlay" onClick={() => setSidebarOpen(false)}/>}
       <aside className="sidebar">
         <div className="brand">
           <div className="brand-mark"/>
@@ -77,6 +80,9 @@ function App() {
 
       <main className="main">
         <header className="topbar">
+          <button className="icon-btn mobile-menu-btn" onClick={() => setSidebarOpen(o => !o)} title="Menu">
+            <Icon name="menu" size={18}/>
+          </button>
           <div>
             <h1>{t(lang,'top.'+route+'.title')}</h1>
             <div className="topbar-sub">{t(lang,'top.'+route+'.sub')}</div>
@@ -117,6 +123,16 @@ function App() {
         {route==='history'   && <History   state={state} lang={lang}/>}
         {route==='loyalty'   && <Loyalty   state={state} lang={lang}/>}
       </main>
+
+      <nav className="bottom-nav">
+        {NAV.map(n => (
+          <button key={n.id} className={`bottom-nav-item ${route===n.id?'active':''}`} onClick={() => setRoute(n.id)}>
+            <Icon name={n.icon} size={22}/>
+            <span>{t(lang,'nav.'+n.id)}</span>
+            {n.id==='booking' && upcomingCount>0 && <span className="bottom-nav-badge">{upcomingCount}</span>}
+          </button>
+        ))}
+      </nav>
 
       <Toasts items={state.toasts} onDismiss={dismiss}/>
     </div>

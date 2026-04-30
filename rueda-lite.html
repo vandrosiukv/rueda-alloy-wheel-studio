@@ -281,6 +281,71 @@ input,select,textarea{font:inherit;color:inherit}
 .modal-head{padding:18px 22px 6px}
 .modal-body{padding:16px 22px}
 .modal-foot{padding:14px 22px 18px;display:flex;gap:10px;justify-content:flex-end;border-top:1px solid var(--border);background:var(--bg-2)}
+
+/* ── Mobile adaptation ── */
+.mobile-menu-btn{display:none}
+.sidebar-overlay{display:none}
+.bottom-nav{display:none}
+
+@media(max-width:768px){
+  /* viewport fix */
+  html,body{height:100%;overflow:hidden}
+  .app{height:100dvh;overflow:hidden;display:flex;flex-direction:column}
+
+  /* sidebar: slide-in drawer */
+  .sidebar{
+    position:fixed;inset:0 auto 0 0;z-index:40;width:260px;
+    transform:translateX(-100%);transition:transform .28s cubic-bezier(.4,0,.2,1);
+  }
+  .sidebar-is-open .sidebar{transform:translateX(0)}
+  .sidebar-overlay{
+    display:block;position:fixed;inset:0;z-index:39;
+    background:rgba(0,0,0,.4);backdrop-filter:blur(2px);
+  }
+
+  /* main scrolls inside */
+  .main{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:calc(60px + env(safe-area-inset-bottom))}
+
+  /* topbar */
+  .topbar{padding:0 10px;gap:6px}
+  .mobile-menu-btn{display:flex}
+  .topbar h1{font-size:15px}
+  .topbar-sub{display:none}
+
+  /* bottom nav */
+  .bottom-nav{
+    display:flex;position:fixed;bottom:0;left:0;right:0;z-index:30;
+    background:var(--surface);border-top:1px solid var(--border);
+    padding-bottom:env(safe-area-inset-bottom);
+    min-height:54px;
+  }
+  .bottom-nav-item{
+    flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    gap:3px;font-size:9.5px;color:var(--muted);padding:6px 0;position:relative;
+    transition:color .15s;
+  }
+  .bottom-nav-item.active{color:var(--primary)}
+  .bottom-nav-item span{line-height:1}
+  .bottom-nav-badge{
+    position:absolute;top:4px;right:calc(50% - 16px);
+    background:var(--danger,#e74c3c);color:#fff;
+    border-radius:999px;font-size:9px;font-weight:700;
+    min-width:16px;height:16px;display:flex;align-items:center;justify-content:center;padding:0 3px;
+  }
+
+  /* content grids */
+  .dash-grid,.stats,.tiers{grid-template-columns:1fr!important}
+  .svc-grid{grid-template-columns:1fr!important}
+  .page{padding:14px}
+
+  /* inputs — prevent iOS zoom */
+  input,select,textarea{font-size:16px!important}
+
+  /* modal → bottom sheet */
+  .modal-bg{align-items:flex-end;padding:0}
+  .modal{border-radius:18px 18px 0 0;max-width:100%;max-height:90dvh;overflow-y:auto}
+  .modal-foot{padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+}
 </style>
 </head>
 <body>
