@@ -1,3 +1,4 @@
+
 /* global React */
 // --- Shared UI: Icon, Modal, Toast, Button ---
 
@@ -93,6 +94,12 @@ function Icon({ name, size = 18, stroke = 1.75, className = '' }) {
     case 'spark': return (
       <svg {...props}><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg>
     );
+    case 'globe': return (
+      <svg {...props}><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a14 14 0 0 1 0 20M12 2a14 14 0 0 0 0 20"/></svg>
+    );
+    case 'chevron-down': return (
+      <svg {...props}><path d="m6 9 6 6 6-6"/></svg>
+    );
     default: return <svg {...props}/>;
   }
 }
@@ -176,3 +183,4 @@ function isoDate(d) {
 }
 
 Object.assign(window, { Icon, Button, Modal, Toasts, monthMatrix, isoDate });
+
