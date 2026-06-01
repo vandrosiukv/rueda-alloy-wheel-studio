@@ -6326,131 +6326,241 @@ ReactDOM.createRoot(document.getElementById('root')).render(/*#__PURE__*/React.c
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
 
+<script type="text/babel" data-src="src/i18n.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-i18n">
+
+/* global window */
+
+const LANG_LABEL  = { en: 'English', uk: 'Українська', es: 'Español' };
+const LANG_CODE   = { en: 'EN', uk: 'UK', es: 'ES' };
+const LANG_LOCALE = { en: 'en-GB', uk: 'uk-UA', es: 'es-ES' };
+
+const STRINGS = {
+  // Nav
+  'nav.workshop':   { en: 'Workshop',   uk: 'Майстерня', es: 'Taller'    },
+  'nav.account':    { en: 'Account',    uk: 'Кабінет',   es: 'Cuenta'    },
+  'nav.dashboard':  { en: 'Dashboard',  uk: 'Огляд',     es: 'Panel'     },
+  'nav.booking':    { en: 'Book a slot',uk: 'Бронювання',es: 'Reserva'   },
+  'nav.services':   { en: 'Services',   uk: 'Послуги',   es: 'Servicios' },
+  'nav.garage':     { en: 'My garage',  uk: 'Мій гараж', es: 'Mi garaje' },
+  'nav.history':    { en: 'History',    uk: 'Історія',   es: 'Historial' },
+  'nav.loyalty':    { en: 'Loyalty',    uk: 'Лояльність',es: 'Fidelidad' },
+
+  // Page titles
+  'page.dashboard.title': { en: 'Dashboard',  uk: 'Огляд',      es: 'Panel'          },
+  'page.dashboard.sub':   { en: 'Overview of your account', uk: 'Огляд вашого акаунту', es: 'Resumen de tu cuenta' },
+  'page.booking.title':   { en: 'Book a slot', uk: 'Бронювання', es: 'Reservar cita'  },
+  'page.booking.sub':     { en: 'Schedule, edit or cancel', uk: 'Створіть, змініть або скасуйте', es: 'Programar, editar o cancelar' },
+  'page.services.title':  { en: 'Services',   uk: 'Послуги',     es: 'Servicios'      },
+  'page.services.sub':    { en: 'Alloy restoration & tires', uk: 'Реставрація дисків та шини', es: 'Llantas y neumáticos' },
+  'page.garage.title':    { en: 'My garage',  uk: 'Мій гараж',  es: 'Mi garaje'      },
+  'page.garage.sub':      { en: 'Profile & vehicles', uk: 'Профіль та авто', es: 'Perfil y vehículos' },
+  'page.history.title':   { en: 'History',    uk: 'Історія',    es: 'Historial'      },
+  'page.history.sub':     { en: 'Work log & spending', uk: 'Журнал робіт і витрати', es: 'Registro y gastos' },
+  'page.loyalty.title':   { en: 'Loyalty',    uk: 'Лояльність', es: 'Fidelidad'      },
+  'page.loyalty.sub':     { en: 'Tiers, points, referrals', uk: 'Рівні, бали, запрошення', es: 'Niveles, puntos, referencias' },
+
+  // Common
+  'c.newBooking':   { en: 'New booking',  uk: 'Нове бронювання', es: 'Nueva reserva'  },
+  'c.confirm':      { en: 'Confirm',      uk: 'Підтвердити',     es: 'Confirmar'      },
+  'c.cancel':       { en: 'Cancel',       uk: 'Скасувати',       es: 'Cancelar'       },
+  'c.save':         { en: 'Save',         uk: 'Зберегти',        es: 'Guardar'        },
+  'c.edit':         { en: 'Edit',         uk: 'Змінити',         es: 'Editar'         },
+  'c.remove':       { en: 'Remove',       uk: 'Видалити',        es: 'Eliminar'       },
+  'c.back':         { en: 'Back',         uk: 'Назад',           es: 'Atrás'          },
+  'c.continue':     { en: 'Continue',     uk: 'Далі',            es: 'Continuar'      },
+  'c.copy':         { en: 'Copy',         uk: 'Копіювати',       es: 'Copiar'         },
+  'c.primary':      { en: 'Primary',      uk: 'Основне',         es: 'Principal'      },
+  'c.confirmed':    { en: 'Confirmed',    uk: 'Підтверджено',    es: 'Confirmada'     },
+  'c.off':          { en: 'off',          uk: 'знижка',          es: 'dto.'           },
+  'c.language':     { en: 'Language',     uk: 'Мова',            es: 'Idioma'         },
+  'c.notifications':{ en: 'Notifications',uk: 'Сповіщення',     es: 'Notificaciones' },
+  'c.toggleTheme':  { en: 'Toggle theme', uk: 'Тема',            es: 'Cambiar tema'   },
+  'c.wheels':       { en: 'wheels',       uk: 'колеса',          es: 'ruedas'         },
+  'c.min':          { en: 'min',          uk: 'хв',              es: 'min'            },
+  'c.from':         { en: 'from',         uk: 'від',             es: 'desde'          },
+
+  // Dashboard
+  'dash.greeting':        { en: 'Good day',    uk: 'Вітаємо',    es: 'Buenas tardes'  },
+  'dash.ready':           { en: 'ready for your next visit.', uk: 'готові до наступного візиту.', es: 'listo para tu próxima visita.' },
+  'dash.lifetimeSpend':   { en: 'Lifetime spend',    uk: 'Всього витрачено',      es: 'Gasto total'        },
+  'dash.completedVisits': { en: 'completed visits',  uk: 'завершених візитів',    es: 'visitas completadas'},
+  'dash.activeVehicles':  { en: 'Active vehicles',   uk: 'Авто',                  es: 'Vehículos'          },
+  'dash.upcoming':        { en: 'Upcoming',           uk: 'Майбутні',              es: 'Próximas'           },
+  'dash.next':            { en: 'next',               uk: 'наступне',              es: 'próxima'            },
+  'dash.loyaltyTier':     { en: 'Loyalty tier',       uk: 'Рівень лояльності',     es: 'Nivel de fidelidad' },
+  'dash.topTier':         { en: 'top tier',            uk: 'найвищий рівень',       es: 'nivel máximo'       },
+  'dash.upcomingAppointments': { en: 'Upcoming appointments', uk: 'Майбутні записи', es: 'Próximas citas'   },
+  'dash.noUpcoming':      { en: 'No upcoming appointments. Book your next visit.', uk: 'Немає майбутніх записів. Забронюйте наступний візит.', es: 'Sin citas próximas. Reserva tu próxima visita.' },
+  'dash.recentVisits':    { en: 'Recent visits',      uk: 'Останні візити',        es: 'Visitas recientes'  },
+  'dash.viewAll':         { en: 'View all →',          uk: 'Всі →',                 es: 'Ver todo →'         },
+  'dash.yourGarage':      { en: 'Your garage',         uk: 'Ваш гараж',             es: 'Tu garaje'          },
+  'dash.vehicles':        { en: 'vehicles',             uk: 'авто',                  es: 'vehículos'          },
+  'dash.manageVehicles':  { en: 'Manage vehicles',     uk: 'Керувати авто',         es: 'Gestionar vehículos'},
+  'dash.loyaltyProgress': { en: 'Loyalty progress',    uk: 'Прогрес лояльності',    es: 'Progreso de fidelidad' },
+  'dash.spendMore':       { en: 'more to reach',        uk: 'щоб досягти',           es: 'más para alcanzar'  },
+  'dash.andUnlock':       { en: 'and unlock',           uk: 'і отримати',            es: 'y desbloquear'      },
+  'dash.topTierMsg':      { en: "You're at the top tier. Thank you for your loyalty.", uk: 'Ви на найвищому рівні. Дякуємо за вашу довіру.', es: 'Estás en el nivel más alto. Gracias por tu confianza.' },
+  'dash.programDetails':  { en: 'Program details →',   uk: 'Деталі програми →',     es: 'Detalles del programa →' },
+  'dash.lastVisit':       { en: 'Last visit',           uk: 'Останній візит',        es: 'Última visita'      },
+  'dash.handledBy':       { en: 'Handled by',           uk: 'Виконав',               es: 'Atendido por'       },
+  'dash.yourRating':      { en: 'your rating',          uk: 'ваша оцінка',           es: 'tu valoración'      },
+  'dash.bookingCancelled':{ en: 'Booking cancelled',   uk: 'Бронювання скасовано',  es: 'Reserva cancelada'  },
+  'dash.primary':         { en: 'primary',               uk: 'основне',               es: 'principal'          },
+
+  // Table
+  'tbl.date':    { en: 'Date',    uk: 'Дата',    es: 'Fecha'      },
+  'tbl.services':{ en: 'Services',uk: 'Послуги', es: 'Servicios'  },
+  'tbl.vehicle': { en: 'Vehicle', uk: 'Авто',    es: 'Vehículo'   },
+  'tbl.total':   { en: 'Total',   uk: 'Сума',    es: 'Total'      },
+  'tbl.tech':    { en: 'Technician', uk: 'Майстер', es: 'Técnico' },
+  'tbl.rating':  { en: 'Rating',  uk: 'Оцінка',  es: 'Valoración' },
+  'tbl.work':    { en: 'Work performed', uk: 'Виконані роботи', es: 'Trabajo realizado' },
+
+  // Garage
+  'gar.myAccount':     { en: 'My account',    uk: 'Мій кабінет',     es: 'Mi cuenta'       },
+  'gar.profileGarage': { en: 'Profile & garage', uk: 'Профіль та гараж', es: 'Perfil y garaje' },
+  'gar.addVehicle':    { en: 'Add vehicle',   uk: 'Додати авто',      es: 'Añadir vehículo' },
+  'gar.personalDetails':{ en: 'Personal details', uk: 'Особисті дані', es: 'Datos personales'},
+  'gar.memberSince':   { en: 'Member since',  uk: 'Учасник з',        es: 'Miembro desde'   },
+  'gar.email':         { en: 'Email',         uk: 'Email',            es: 'Correo'          },
+  'gar.phone':         { en: 'Phone',         uk: 'Телефон',          es: 'Teléfono'        },
+  'gar.tier':          { en: 'Tier',          uk: 'Рівень',           es: 'Nivel'           },
+  'gar.editProfile':   { en: 'Edit profile',  uk: 'Редагувати профіль', es: 'Editar perfil'  },
+  'gar.vehicles':      { en: 'Vehicles',      uk: 'Авто',             es: 'Vehículos'       },
+  'gar.onFile':        { en: 'on file',        uk: 'в системі',        es: 'registrados'     },
+  'gar.noVehicles':    { en: 'No vehicles yet.', uk: 'Немає авто.', es: 'Sin vehículos aún.' },
+  'gar.editVehicle':   { en: 'Edit vehicle',  uk: 'Редагувати авто',  es: 'Editar vehículo' },
+  'gar.addVehicleTitle':{ en: 'Add a vehicle', uk: 'Додати авто',     es: 'Añadir un vehículo' },
+  'gar.vehicleSub':    { en: 'Your saved vehicles pre-fill bookings and service history.', uk: 'Збережені авто автоматично підставляються при бронюванні.', es: 'Los vehículos guardados rellenan automáticamente las reservas.' },
+  'gar.plate':         { en: 'Plate',         uk: 'Номерний знак',    es: 'Matrícula'       },
+  'gar.year':          { en: 'Year',          uk: 'Рік',              es: 'Año'             },
+  'gar.make':          { en: 'Make',          uk: 'Марка',            es: 'Marca'           },
+  'gar.model':         { en: 'Model',         uk: 'Модель',           es: 'Modelo'          },
+  'gar.wheelSize':     { en: 'Wheel size',    uk: 'Розмір дисків',    es: 'Tamaño de llanta'},
+  'gar.primaryLabel':  { en: 'Set as default vehicle', uk: 'Встановити як основне', es: 'Establecer como principal' },
+  'gar.vehicleUpdated':{ en: 'Vehicle updated', uk: 'Авто оновлено', es: 'Vehículo actualizado' },
+  'gar.vehicleAdded':  { en: 'Vehicle added', uk: 'Авто додано',      es: 'Vehículo añadido'},
+  'gar.vehicleRemoved':{ en: 'Vehicle removed', uk: 'Авто видалено', es: 'Vehículo eliminado' },
+
+  // History
+  'hist.totalSpend':   { en: 'Total spend',    uk: 'Загальна сума',        es: 'Gasto total'       },
+  'hist.across':       { en: 'across',          uk: 'за',                   es: 'en'                },
+  'hist.visits':       { en: 'visits',           uk: 'візитів',              es: 'visitas'           },
+  'hist.alloyWork':    { en: 'Alloy work',      uk: 'Роботи з дисками',     es: 'Trabajos de llantas'},
+  'hist.tireService':  { en: 'Tire service',    uk: 'Роботи з шинами',      es: 'Servicio de neumáticos' },
+  'hist.restorationRepairPaint': { en: 'restoration, repair, paint', uk: 'реставрація, ремонт, фарбування', es: 'restauración, reparación, pintura' },
+  'hist.changesAlignmentRepair': { en: 'changes, alignment, repair', uk: 'заміна, розвал, ремонт', es: 'cambios, alineación, reparación' },
+  'hist.monthly':      { en: 'Monthly spend — last 12 months', uk: 'Витрати за 12 місяців', es: 'Gasto mensual — últimos 12 meses' },
+  'hist.allVisits':    { en: 'All visits',      uk: 'Всі візити',            es: 'Todas las visitas' },
+  'hist.results':      { en: 'results',          uk: 'записів',               es: 'resultados'        },
+  'hist.filter.all':   { en: 'All',             uk: 'Всі',                   es: 'Todo'              },
+  'hist.filter.alloy': { en: 'Alloy',           uk: 'Диски',                 es: 'Llantas'           },
+  'hist.filter.tire':  { en: 'Tires',           uk: 'Шини',                  es: 'Neumáticos'        },
+  'hist.filter.allVeh':{ en: 'All vehicles',    uk: 'Всі авто',              es: 'Todos los vehículos'},
+  'hist.alloyTag':     { en: 'Alloy',           uk: 'Диски',                 es: 'Llantas'           },
+  'hist.tiresTag':     { en: 'Tires',           uk: 'Шини',                  es: 'Neumáticos'        },
+
+  // Loyalty
+  'loy.program':      { en: 'Loyalty program', uk: 'Програма лояльності', es: 'Programa de fidelidad' },
+  'loy.clubTitle':    { en: 'Club Rueda',       uk: 'Клуб Rueda',          es: 'Club Rueda'           },
+  'loy.memberTier':   { en: 'Member tier',      uk: 'Рівень учасника',     es: 'Nivel de socio'       },
+  'loy.since':        { en: 'since',             uk: 'з',                   es: 'desde'                },
+  'loy.lifetime':     { en: 'lifetime',          uk: 'всього',              es: 'en total'             },
+  'loy.topTier':      { en: 'top tier',          uk: 'найвищий рівень',     es: 'nivel máximo'         },
+  'loy.toUnlock':     { en: 'to unlock',         uk: 'щоб розблокувати',    es: 'para desbloquear'     },
+  'loy.offEverything':{ en: 'off everything',    uk: 'знижки на все',       es: 'de descuento en todo' },
+  'loy.maxDiscount':  { en: "You're enjoying the maximum", uk: 'Ви маєте максимальну', es: 'Disfrutas del máximo' },
+  'loy.discount':     { en: 'discount.',          uk: 'знижку.',             es: 'descuento.'           },
+  'loy.points':       { en: 'Your points',        uk: 'Ваші бали',           es: 'Tus puntos'           },
+  'loy.earned':       { en: 'Earned',             uk: 'Зароблено',           es: 'Acumulados'           },
+  'loy.redeemable':   { en: 'Redeemable',         uk: 'Доступно',            es: 'Canjeables'           },
+  'loy.pointsHelp':   { en: 'Earn 1 point per euro spent. Redeem every 10 points as €1 off your next visit.', uk: '1 бал за кожне витрачене євро. Кожні 10 балів = €1 знижки на наступний візит.', es: '1 punto por euro gastado. Cada 10 puntos equivalen a €1 de descuento.' },
+  'loy.redeem':       { en: 'Redeem at next visit', uk: 'Використати при наступному візиті', es: 'Canjear en próxima visita' },
+  'loy.referrals':    { en: 'Referrals',           uk: 'Запрошення',          es: 'Referencias'          },
+  'loy.refHelp':      { en: 'Refer a friend. When they complete their first visit, you both receive', uk: 'Запросіть друга. Після першого візиту ви обидва отримаєте', es: 'Recomienda a un amigo. Tras su primera visita, ambos recibiréis' },
+  'loy.credit':       { en: 'credit',              uk: 'кредиту',             es: 'de crédito'           },
+  'loy.allTiers':     { en: 'All tiers',           uk: 'Всі рівні',           es: 'Todos los niveles'    },
+  'loy.tiersSub':     { en: '4 levels · benefits stack within tier', uk: '4 рівні · переваги підсумовуються', es: '4 niveles · los beneficios se acumulan' },
+  'loy.welcomeLevel': { en: 'Welcome level',       uk: 'Початковий рівень',   es: 'Nivel inicial'        },
+  'loy.fromLifetime': { en: 'From',                uk: 'Від',                 es: 'Desde'                },
+  'loy.current':      { en: 'Current',             uk: 'Поточний',            es: 'Actual'               },
+
+  // Booking
+  'book.editing':     { en: 'Editing booking',     uk: 'Редагування бронювання', es: 'Editando reserva'  },
+  'book.new':         { en: 'New booking',         uk: 'Нове бронювання',        es: 'Nueva reserva'     },
+  'book.changeAppt':  { en: 'Change your appointment', uk: 'Змінити запис',      es: 'Cambiar tu cita'   },
+  'book.bookVisit':   { en: 'Book your visit',     uk: 'Забронювати візит',       es: 'Reservar tu visita'},
+  'book.step1':       { en: 'Services & vehicle',  uk: 'Послуги та авто',         es: 'Servicios y vehículo' },
+  'book.step2':       { en: 'Date & time',         uk: 'Дата та час',             es: 'Fecha y hora'      },
+  'book.step3':       { en: 'Confirm',             uk: 'Підтвердження',           es: 'Confirmar'         },
+  'book.chooseServices':{ en: 'Choose services',   uk: 'Оберіть послуги',         es: 'Elige servicios'   },
+  'book.selected':    { en: 'selected',             uk: 'обрано',                  es: 'seleccionado(s)'   },
+  'book.vehicle':     { en: 'Vehicle',             uk: 'Авто',                    es: 'Vehículo'          },
+  'book.pickDay':     { en: 'Pick a day',          uk: 'Оберіть день',            es: 'Elige un día'      },
+  'book.availableTimes':{ en: 'Available times',   uk: 'Доступний час',           es: 'Horarios disponibles' },
+  'book.pickDayFirst':{ en: 'Choose a date to see open slots.', uk: 'Оберіть дату для перегляду вільних слотів.', es: 'Elige una fecha para ver los horarios disponibles.' },
+  'book.sundayClosed':{ en: 'Closed on Sundays — please pick another day.', uk: 'Неділя — вихідний, оберіть інший день.', es: 'Cerrado los domingos — elige otro día.' },
+  'book.closed':      { en: 'closed',              uk: 'зачинено',                es: 'cerrado'           },
+  'book.orderSummary':{ en: 'Order summary',       uk: 'Підсумок',                es: 'Resumen'           },
+  'book.pickService': { en: 'Pick at least one service to begin.', uk: 'Оберіть принаймні одну послугу.', es: 'Elige al menos un servicio para comenzar.' },
+  'book.subtotal':    { en: 'Subtotal',             uk: 'Підсумок',                es: 'Subtotal'          },
+  'book.loyalty':     { en: 'Loyalty',             uk: 'Лояльність',              es: 'Fidelidad'         },
+  'book.total':       { en: 'Total',               uk: 'Всього',                  es: 'Total'             },
+  'book.finalNote':   { en: 'Final price confirmed on inspection. No charge until completion.', uk: 'Остаточна ціна після огляду. Оплата після завершення робіт.', es: 'Precio final confirmado en inspección. Sin cargo hasta la finalización.' },
+  'book.reviewConfirm':{ en: 'Review & confirm',  uk: 'Перегляд та підтвердження', es: 'Revisar y confirmar' },
+  'book.when':        { en: 'When',                uk: 'Коли',                    es: 'Cuándo'            },
+  'book.services':    { en: 'Services',            uk: 'Послуги',                 es: 'Servicios'         },
+  'book.duration':    { en: 'Duration',            uk: 'Тривалість',              es: 'Duración'          },
+  'book.note':        { en: 'Note for the technician (optional)', uk: 'Примітка для майстра (необов\'язково)', es: 'Nota para el técnico (opcional)' },
+  'book.notePh':      { en: 'e.g. one wheel has a repaired kerb scuff on the inner rim', uk: 'напр. одне колесо має відремонтоване пошкодження', es: 'p.ej. una rueda tiene un arañazo reparado en la llanta interior' },
+  'book.confirmed':   { en: 'Booking confirmed',   uk: 'Бронювання підтверджено', es: '¡Reserva confirmada!' },
+  'book.updated':     { en: 'Booking updated',     uk: 'Бронювання оновлено',     es: 'Reserva actualizada'},
+  'book.saveChanges': { en: 'Save changes',        uk: 'Зберегти зміни',          es: 'Guardar cambios'   },
+  'book.confirmBooking':{ en: 'Confirm booking',   uk: 'Підтвердити бронювання',  es: 'Confirmar reserva' },
+
+  // Services
+  'svc.catalogue':    { en: 'Catalogue',   uk: 'Каталог',    es: 'Catálogo'    },
+  'svc.title':        { en: 'Services — alloy wheels & tires', uk: 'Послуги — диски та шини', es: 'Servicios — llantas y neumáticos' },
+  'svc.intro':        { en: 'From kerb-rash spot repair to full restoration with diamond-cut finish or custom paint. Every alloy service includes strip, inspection, primer, colour, two-layer clear lacquer — turnkey.', uk: 'Від точкового ремонту до повної реставрації з діамантовим різанням або кастомним фарбуванням.', es: 'Desde reparación puntual hasta restauración completa con acabado diamond cut o pintura personalizada.' },
+  'svc.all':          { en: 'All services', uk: 'Всі послуги', es: 'Todos los servicios' },
+  'svc.book':         { en: 'Book',        uk: 'Записатись', es: 'Reservar'    },
+  'svc.featured':     { en: '★ Turnkey',   uk: '★ Під ключ', es: '★ Llave en mano' },
+};
+
+function t(lang, key) {
+  const entry = STRINGS[key];
+  if (!entry) return key;
+  return entry[lang] || entry['en'] || key;
+}
+
+Object.assign(window, { t, LANG_LABEL, LANG_CODE, LANG_LOCALE });
+
+</script>
 <script type="text/babel" data-src="src/data.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-0">
-/* global React */
+
+/* global window */
 // --- Rueda app state & seed data ---
 
 const LS_KEY = 'rueda_state_v1';
 
 const SERVICES = [
-  {
-    id: 'alloy-refurb',
-    category: 'Alloy Restoration',
-    title: 'Full Alloy Refurbishment',
-    subtitle: 'Turnkey — strip, repair, paint, lacquer',
-    desc: 'Complete restoration: chemical strip, kerb-rash repair, primer, base coat, two-layer clear lacquer. 24h cure.',
-    price: 95,
-    unit: 'per wheel',
-    duration: 180,
-    featured: true,
-    tag: 'Alloy · Turnkey',
-  },
-  {
-    id: 'diamond-cut',
-    category: 'Alloy Restoration',
-    title: 'Diamond Cut Finish',
-    subtitle: 'CNC-lathe precision resurface',
-    desc: 'Machined mirror-cut face on two-tone alloys. Checked for TIR, lacquered to OEM spec.',
-    price: 120,
-    unit: 'per wheel',
-    duration: 150,
-    tag: 'Alloy · Premium',
-  },
-  {
-    id: 'kerb-repair',
-    category: 'Alloy Restoration',
-    title: 'Kerb Damage Repair',
-    subtitle: 'Single-point rash & scuff fix',
-    desc: 'Spot repair for curb rash: fill, sand, colour-match, blend. Best for localised damage.',
-    price: 45,
-    unit: 'per wheel',
-    duration: 75,
-    tag: 'Alloy · Repair',
-  },
-  {
-    id: 'custom-colour',
-    category: 'Alloy Restoration',
-    title: 'Custom Colour & Finish',
-    subtitle: 'Bespoke paint, satin, matte or metallic',
-    desc: 'Choose from 400+ RAL and custom pearl finishes. Includes colour sample, two-stage paint and ceramic top-coat.',
-    price: 140,
-    unit: 'per wheel',
-    duration: 240,
-    tag: 'Alloy · Custom',
-  },
-  {
-    id: 'straighten',
-    category: 'Alloy Restoration',
-    title: 'Wheel Straightening',
-    subtitle: 'Hydraulic bend & buckle correction',
-    desc: 'For alloys bent by potholes. Runout measured, corrected on 30-ton hydraulic press, re-balanced.',
-    price: 70,
-    unit: 'per wheel',
-    duration: 90,
-    tag: 'Alloy · Structural',
-  },
-  {
-    id: 'tire-change',
-    category: 'Tire Service',
-    title: 'Tire Change & Balance',
-    subtitle: 'Seasonal swap, 4 wheels',
-    desc: 'Dismount, mount, high-speed balancing, valve replacement, torque-to-spec. All sizes to 22".',
-    price: 60,
-    unit: 'set of 4',
-    duration: 45,
-    tag: 'Tires',
-  },
-  {
-    id: 'puncture',
-    category: 'Tire Service',
-    title: 'Puncture Repair',
-    subtitle: 'Internal patch & plug',
-    desc: 'Internal mushroom patch repair (not a rope plug). Only on tread, within legal repair zone.',
-    price: 18,
-    unit: 'per tire',
-    duration: 30,
-    tag: 'Tires',
-  },
-  {
-    id: 'alignment',
-    category: 'Tire Service',
-    title: '4-Wheel Alignment',
-    subtitle: 'Laser-guided geometry',
-    desc: 'Hunter HawkEye camera alignment. Camber, caster, toe to manufacturer spec with printout.',
-    price: 55,
-    unit: 'per vehicle',
-    duration: 60,
-    tag: 'Tires',
-  },
-  {
-    id: 'nitrogen',
-    category: 'Tire Service',
-    title: 'Nitrogen Inflation',
-    subtitle: 'N₂ pressure stability',
-    desc: 'Full purge & refill with 95%+ nitrogen. Reduces pressure drift from temperature changes.',
-    price: 12,
-    unit: 'set of 4',
-    duration: 15,
-    tag: 'Tires',
-  },
-  {
-    id: 'ceramic',
-    category: 'Alloy Restoration',
-    title: 'Ceramic Wheel Coating',
-    subtitle: '9H hardness, 3-year warranty',
-    desc: 'Hydrophobic ceramic coating over fresh lacquer. Protects against brake dust and road salt.',
-    price: 60,
-    unit: 'per wheel',
-    duration: 60,
-    tag: 'Alloy · Protection',
-  },
+  { id: 'alloy-refurb',  category: 'Alloy Restoration', title: 'Full Alloy Refurbishment',  subtitle: 'Turnkey — strip, repair, paint, lacquer',              desc: 'Complete restoration: chemical strip, kerb-rash repair, primer, base coat, two-layer clear lacquer. 24h cure.', price: 95,  unit: 'per wheel', duration: 180, featured: true, tag: 'Alloy · Turnkey'    },
+  { id: 'diamond-cut',   category: 'Alloy Restoration', title: 'Diamond Cut Finish',         subtitle: 'CNC-lathe precision resurface',                         desc: 'Machined mirror-cut face on two-tone alloys. Checked for TIR, lacquered to OEM spec.',                          price: 120, unit: 'per wheel', duration: 150,               tag: 'Alloy · Premium'    },
+  { id: 'kerb-repair',   category: 'Alloy Restoration', title: 'Kerb Damage Repair',         subtitle: 'Single-point rash & scuff fix',                         desc: 'Spot repair for curb rash: fill, sand, colour-match, blend. Best for localised damage.',                        price: 45,  unit: 'per wheel', duration: 75,                tag: 'Alloy · Repair'     },
+  { id: 'custom-colour', category: 'Alloy Restoration', title: 'Custom Colour & Finish',     subtitle: 'Bespoke paint, satin, matte or metallic',               desc: 'Choose from 400+ RAL and custom pearl finishes. Includes colour sample, two-stage paint and ceramic top-coat.', price: 140, unit: 'per wheel', duration: 240,               tag: 'Alloy · Custom'     },
+  { id: 'straighten',    category: 'Alloy Restoration', title: 'Wheel Straightening',        subtitle: 'Hydraulic bend & buckle correction',                    desc: 'For alloys bent by potholes. Runout measured, corrected on 30-ton hydraulic press, re-balanced.',               price: 70,  unit: 'per wheel', duration: 90,                tag: 'Alloy · Structural' },
+  { id: 'tire-change',   category: 'Tire Service',      title: 'Tire Change & Balance',      subtitle: 'Seasonal swap, 4 wheels',                               desc: 'Dismount, mount, high-speed balancing, valve replacement, torque-to-spec. All sizes to 22".',                   price: 60,  unit: 'set of 4',  duration: 45,                tag: 'Tires'              },
+  { id: 'puncture',      category: 'Tire Service',      title: 'Puncture Repair',            subtitle: 'Internal patch & plug',                                 desc: 'Internal mushroom patch repair (not a rope plug). Only on tread, within legal repair zone.',                    price: 18,  unit: 'per tire',  duration: 30,                tag: 'Tires'              },
+  { id: 'alignment',     category: 'Tire Service',      title: '4-Wheel Alignment',          subtitle: 'Laser-guided geometry',                                 desc: 'Hunter HawkEye camera alignment. Camber, caster, toe to manufacturer spec with printout.',                       price: 55,  unit: 'per vehicle', duration: 60,              tag: 'Tires'              },
+  { id: 'nitrogen',      category: 'Tire Service',      title: 'Nitrogen Inflation',         subtitle: 'N₂ pressure stability',                                 desc: 'Full purge & refill with 95%+ nitrogen. Reduces pressure drift from temperature changes.',                       price: 12,  unit: 'set of 4',  duration: 15,                tag: 'Tires'              },
+  { id: 'ceramic',       category: 'Alloy Restoration', title: 'Ceramic Wheel Coating',      subtitle: '9H hardness, 3-year warranty',                          desc: 'Hydrophobic ceramic coating over fresh lacquer. Protects against brake dust and road salt.',                     price: 60,  unit: 'per wheel', duration: 60,                tag: 'Alloy · Protection' },
 ];
 
 const TIERS = [
-  { name: 'Aceituna',  minSpend: 0,    discount: 0,   perks: ['Free nitrogen top-up', 'SMS appointment reminders'] },
-  { name: 'Naranja',   minSpend: 250,  discount: 5,   perks: ['5% off all services', 'Priority weekday slots', 'Free kerb inspection'] },
-  { name: 'Azahar',    minSpend: 750,  discount: 10,  perks: ['10% off all services', 'Courtesy EV shuttle (5km)', '1 free puncture repair / yr'] },
-  { name: 'Albero',    minSpend: 1800, discount: 15,  perks: ['15% off all services', '24h emergency slot guarantee', 'Annual ceramic re-coat (1 wheel)', 'Named technician'] },
+  { name: 'Aceituna', minSpend: 0,    discount: 0,   perks: ['Free nitrogen top-up', 'SMS appointment reminders'] },
+  { name: 'Naranja',  minSpend: 250,  discount: 5,   perks: ['5% off all services', 'Priority weekday slots', 'Free kerb inspection'] },
+  { name: 'Azahar',   minSpend: 750,  discount: 10,  perks: ['10% off all services', 'Courtesy EV shuttle (5km)', '1 free puncture repair / yr'] },
+  { name: 'Albero',   minSpend: 1800, discount: 15,  perks: ['15% off all services', '24h emergency slot guarantee', 'Annual ceramic re-coat (1 wheel)', 'Named technician'] },
 ];
 
 function todayStr() {
@@ -6463,6 +6573,7 @@ function daysFromNow(n) {
 }
 
 const DEFAULT_STATE = {
+  lang: 'en',
   theme: 'light',
   route: 'dashboard',
   user: {
@@ -6476,25 +6587,23 @@ const DEFAULT_STATE = {
     { id: 'v2', plate: '7014-BNR', make: 'SEAT', model: 'León FR',   year: 2019, wheelSize: '17"', primary: false },
   ],
   bookings: [
-    // upcoming
-    { id: 'b201', date: daysFromNow(3),  time: '10:30', serviceIds: ['alloy-refurb'], vehicleId: 'v1', status: 'confirmed', note: 'All 4 wheels. Colour match OEM silver.' },
+    { id: 'b201', date: daysFromNow(3),  time: '10:30', serviceIds: ['alloy-refurb'],           vehicleId: 'v1', status: 'confirmed', note: 'All 4 wheels. Colour match OEM silver.' },
     { id: 'b202', date: daysFromNow(12), time: '15:00', serviceIds: ['tire-change', 'alignment'], vehicleId: 'v2', status: 'confirmed', note: '' },
   ],
   history: [
-    { id: 'h101', date: '2026-03-14', serviceIds: ['kerb-repair'],           vehicleId: 'v1', total:  42.75, tech: 'Andrés R.', rating: 5 },
-    { id: 'h100', date: '2026-02-02', serviceIds: ['tire-change', 'nitrogen'], vehicleId: 'v1', total:  68.40, tech: 'Marta G.',  rating: 5 },
-    { id: 'h099', date: '2025-11-19', serviceIds: ['diamond-cut'],           vehicleId: 'v1', total: 456.00, tech: 'Javier L.', rating: 5 },
-    { id: 'h098', date: '2025-10-04', serviceIds: ['alignment'],             vehicleId: 'v2', total:  52.25, tech: 'Andrés R.', rating: 4 },
-    { id: 'h097', date: '2025-08-22', serviceIds: ['puncture'],              vehicleId: 'v2', total:  17.10, tech: 'Marta G.',  rating: 5 },
-    { id: 'h096', date: '2025-05-30', serviceIds: ['ceramic'],               vehicleId: 'v1', total: 228.00, tech: 'Javier L.', rating: 5 },
-    { id: 'h095', date: '2025-04-17', serviceIds: ['tire-change'],           vehicleId: 'v1', total:  57.00, tech: 'Andrés R.', rating: 4 },
-    { id: 'h094', date: '2024-12-11', serviceIds: ['alloy-refurb'],          vehicleId: 'v2', total: 361.00, tech: 'Javier L.', rating: 5 },
-    { id: 'h093', date: '2024-10-06', serviceIds: ['alignment', 'nitrogen'], vehicleId: 'v1', total:  63.65, tech: 'Marta G.',  rating: 5 },
+    { id: 'h101', date: '2026-03-14', serviceIds: ['kerb-repair'],             vehicleId: 'v1', total:  42.75, tech: 'Andrés R.', rating: 5 },
+    { id: 'h100', date: '2026-02-02', serviceIds: ['tire-change', 'nitrogen'],  vehicleId: 'v1', total:  68.40, tech: 'Marta G.',  rating: 5 },
+    { id: 'h099', date: '2025-11-19', serviceIds: ['diamond-cut'],             vehicleId: 'v1', total: 456.00, tech: 'Javier L.', rating: 5 },
+    { id: 'h098', date: '2025-10-04', serviceIds: ['alignment'],               vehicleId: 'v2', total:  52.25, tech: 'Andrés R.', rating: 4 },
+    { id: 'h097', date: '2025-08-22', serviceIds: ['puncture'],                vehicleId: 'v2', total:  17.10, tech: 'Marta G.',  rating: 5 },
+    { id: 'h096', date: '2025-05-30', serviceIds: ['ceramic'],                 vehicleId: 'v1', total: 228.00, tech: 'Javier L.', rating: 5 },
+    { id: 'h095', date: '2025-04-17', serviceIds: ['tire-change'],             vehicleId: 'v1', total:  57.00, tech: 'Andrés R.', rating: 4 },
+    { id: 'h094', date: '2024-12-11', serviceIds: ['alloy-refurb'],            vehicleId: 'v2', total: 361.00, tech: 'Javier L.', rating: 5 },
+    { id: 'h093', date: '2024-10-06', serviceIds: ['alignment', 'nitrogen'],   vehicleId: 'v1', total:  63.65, tech: 'Marta G.',  rating: 5 },
   ],
   toasts: [],
 };
 
-// Time slots: 09:00 to 18:00, every 30 min
 const ALL_SLOTS = (() => {
   const out = [];
   for (let h = 9; h < 18; h++) {
@@ -6504,21 +6613,16 @@ const ALL_SLOTS = (() => {
   return out;
 })();
 
-// fake: some taken slots per day (deterministic from date)
 function takenSlotsForDate(dateStr, bookings) {
   const booked = bookings.filter(b => b.date === dateStr).map(b => b.time);
-  // pseudo-random additional taken slots based on date hash
   let hash = 0;
   for (let i = 0; i < dateStr.length; i++) hash = (hash * 31 + dateStr.charCodeAt(i)) >>> 0;
   const pool = [...ALL_SLOTS];
   const taken = new Set(booked);
-  // sundays fully closed
   const d = new Date(dateStr);
   if (d.getDay() === 0) return { taken: new Set(ALL_SLOTS), closed: true };
   const nTaken = 4 + (hash % 6);
-  for (let i = 0; i < nTaken; i++) {
-    taken.add(pool[(hash + i * 7) % pool.length]);
-  }
+  for (let i = 0; i < nTaken; i++) taken.add(pool[(hash + i * 7) % pool.length]);
   return { taken, closed: false };
 }
 
@@ -6539,32 +6643,27 @@ function saveState(s) {
   } catch {}
 }
 
-function totalSpend(history) {
-  return history.reduce((sum, h) => sum + h.total, 0);
-}
+function totalSpend(history) { return history.reduce((sum, h) => sum + h.total, 0); }
 function currentTier(spend) {
   let t = TIERS[0];
   for (const x of TIERS) if (spend >= x.minSpend) t = x;
   return t;
 }
-function nextTier(spend) {
-  return TIERS.find(t => spend < t.minSpend) || null;
-}
+function nextTier(spend) { return TIERS.find(t => spend < t.minSpend) || null; }
 function serviceById(id) { return SERVICES.find(s => s.id === id); }
 function vehicleById(state, id) { return state.vehicles.find(v => v.id === id); }
 
-function fmtDate(iso, opts = {}) {
+function fmtDate(iso, opts = {}, lang = 'en') {
+  const locale = (typeof LANG_LOCALE !== 'undefined' ? LANG_LOCALE[lang] : null) || 'en-GB';
   const d = new Date(iso + (iso.includes('T') ? '' : 'T00:00'));
   const { weekday = true, year = false } = opts;
   const parts = [];
-  if (weekday) parts.push(d.toLocaleDateString('en-GB', { weekday: 'short' }));
-  parts.push(d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' }));
+  if (weekday) parts.push(d.toLocaleDateString(locale, { weekday: 'short' }));
+  parts.push(d.toLocaleDateString(locale, { day: '2-digit', month: 'short' }));
   if (year) parts.push(d.getFullYear());
   return parts.join(' ');
 }
-function fmtMoney(n) {
-  return '€' + n.toFixed(2);
-}
+function fmtMoney(n) { return '€' + n.toFixed(2); }
 
 Object.assign(window, {
   SERVICES, TIERS, ALL_SLOTS,
@@ -6576,6 +6675,7 @@ Object.assign(window, {
 
 </script>
 <script type="text/babel" data-src="src/ui.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-1">
+
 /* global React */
 // --- Shared UI: Icon, Modal, Toast, Button ---
 
@@ -6671,6 +6771,12 @@ function Icon({ name, size = 18, stroke = 1.75, className = '' }) {
     case 'spark': return (
       <svg {...props}><path d="M12 3v4M12 17v4M3 12h4M17 12h4M6 6l2.5 2.5M15.5 15.5 18 18M6 18l2.5-2.5M15.5 8.5 18 6"/></svg>
     );
+    case 'globe': return (
+      <svg {...props}><circle cx="12" cy="12" r="9"/><path d="M2 12h20M12 2a14 14 0 0 1 0 20M12 2a14 14 0 0 0 0 20"/></svg>
+    );
+    case 'chevron-down': return (
+      <svg {...props}><path d="m6 9 6 6 6-6"/></svg>
+    );
     default: return <svg {...props}/>;
   }
 }
@@ -6755,12 +6861,14 @@ function isoDate(d) {
 
 Object.assign(window, { Icon, Button, Modal, Toasts, monthMatrix, isoDate });
 
+
 </script>
 <script type="text/babel" data-src="src/views/dashboard.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-2">
-/* global React */
+
+/* global React, t */
 const { useState: useStateDash, useMemo: useMemoDash } = React;
 
-function DashboardView({ state, setRoute, setState }) {
+function DashboardView({ state, setRoute, setState, lang }) {
   const spend = totalSpend(state.history);
   const tier = currentTier(spend);
   const next = nextTier(spend);
@@ -6774,34 +6882,34 @@ function DashboardView({ state, setRoute, setState }) {
     <div className="view">
       <div className="row mb-4" style={{ alignItems: 'flex-end', marginBottom: 22 }}>
         <div>
-          <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>Buenas tardes</div>
+          <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>{t(lang,'dash.greeting')}</div>
           <h1 style={{ fontSize: 34, margin: '6px 0 4px', letterSpacing: '-.02em', fontWeight: 600 }}>
             {state.user.name.split(' ')[0]} —
-            <span className="muted" style={{ fontWeight: 400 }}> ready for your next visit.</span>
+            <span className="muted" style={{ fontWeight: 400 }}> {t(lang,'dash.ready')}</span>
           </h1>
         </div>
       </div>
 
       <div className="grid grid-4 mb-4">
         <div className="kpi">
-          <div className="kpi-label">Lifetime spend</div>
+          <div className="kpi-label">{t(lang,'dash.lifetimeSpend')}</div>
           <div className="kpi-value mono tabular">{fmtMoney(spend)}</div>
-          <div className="kpi-foot">{state.history.length} completed visits</div>
+          <div className="kpi-foot">{state.history.length} {t(lang,'dash.completedVisits')}</div>
         </div>
         <div className="kpi">
-          <div className="kpi-label">Active vehicles</div>
+          <div className="kpi-label">{t(lang,'dash.activeVehicles')}</div>
           <div className="kpi-value mono tabular">{state.vehicles.length}</div>
-          <div className="kpi-foot">{state.vehicles.find(v => v.primary)?.plate} · primary</div>
+          <div className="kpi-foot">{state.vehicles.find(v => v.primary)?.plate} · {t(lang,'dash.primary')}</div>
         </div>
         <div className="kpi">
-          <div className="kpi-label">Upcoming</div>
+          <div className="kpi-label">{t(lang,'dash.upcoming')}</div>
           <div className="kpi-value mono tabular">{upcoming.length}</div>
-          <div className="kpi-foot">next {upcoming[0] ? fmtDate(upcoming[0].date) : '—'}</div>
+          <div className="kpi-foot">{t(lang,'dash.next')} {upcoming[0] ? fmtDate(upcoming[0].date, {}, lang) : '—'}</div>
         </div>
         <div className="kpi kpi-accent">
-          <div className="kpi-label">Loyalty tier</div>
+          <div className="kpi-label">{t(lang,'dash.loyaltyTier')}</div>
           <div className="kpi-value">{tier.name}</div>
-          <div className="kpi-foot">{tier.discount}% off · {next ? `${fmtMoney(next.minSpend - spend)} to ${next.name}` : 'top tier'}</div>
+          <div className="kpi-foot">{tier.discount}% {t(lang,'c.off')} · {next ? `${fmtMoney(next.minSpend - spend)} to ${next.name}` : t(lang,'dash.topTier')}</div>
         </div>
       </div>
 
@@ -6809,30 +6917,30 @@ function DashboardView({ state, setRoute, setState }) {
         <div className="col">
           <div className="card card-lg">
             <div className="card-title">
-              Upcoming appointments
-              <Button kind="primary" size="sm" icon="plus" onClick={() => setRoute('booking')}>New booking</Button>
+              {t(lang,'dash.upcomingAppointments')}
+              <Button kind="primary" size="sm" icon="plus" onClick={() => setRoute('booking')}>{t(lang,'c.newBooking')}</Button>
             </div>
             {upcoming.length === 0 ? (
-              <div className="sub">No upcoming appointments. Book your next visit.</div>
+              <div className="sub">{t(lang,'dash.noUpcoming')}</div>
             ) : (
               <div className="col">
-                {upcoming.map(b => <UpcomingBooking key={b.id} b={b} state={state} setState={setState} setRoute={setRoute}/>)}
+                {upcoming.map(b => <UpcomingBooking key={b.id} b={b} state={state} setState={setState} setRoute={setRoute} lang={lang}/>)}
               </div>
             )}
           </div>
 
           <div className="card card-lg">
             <div className="card-title">
-              Recent visits
-              <button className="btn btn-ghost btn-sm" onClick={() => setRoute('history')}>View all →</button>
+              {t(lang,'dash.recentVisits')}
+              <button className="btn btn-ghost btn-sm" onClick={() => setRoute('history')}>{t(lang,'dash.viewAll')}</button>
             </div>
             <table className="tbl">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Services</th>
-                  <th>Vehicle</th>
-                  <th style={{ textAlign: 'right' }}>Total</th>
+                  <th>{t(lang,'tbl.date')}</th>
+                  <th>{t(lang,'tbl.services')}</th>
+                  <th>{t(lang,'tbl.vehicle')}</th>
+                  <th style={{ textAlign: 'right' }}>{t(lang,'tbl.total')}</th>
                 </tr>
               </thead>
               <tbody>
@@ -6840,7 +6948,7 @@ function DashboardView({ state, setRoute, setState }) {
                   const v = vehicleById(state, h.vehicleId);
                   return (
                     <tr key={h.id}>
-                      <td className="mono">{fmtDate(h.date, { weekday: false, year: true })}</td>
+                      <td className="mono">{fmtDate(h.date, { weekday: false, year: true }, lang)}</td>
                       <td>{h.serviceIds.map(id => serviceById(id)?.title).join(' · ')}</td>
                       <td className="mono sub">{v?.plate}</td>
                       <td className="mono tabular" style={{ textAlign: 'right', fontWeight: 600 }}>{fmtMoney(h.total)}</td>
@@ -6855,8 +6963,8 @@ function DashboardView({ state, setRoute, setState }) {
         <div className="col">
           <div className="card card-lg">
             <div className="card-title">
-              Your garage
-              <span className="eyebrow">{state.vehicles.length} vehicles</span>
+              {t(lang,'dash.yourGarage')}
+              <span className="eyebrow">{state.vehicles.length} {t(lang,'dash.vehicles')}</span>
             </div>
             <div className="col">
               {state.vehicles.map(v => (
@@ -6864,19 +6972,19 @@ function DashboardView({ state, setRoute, setState }) {
                   <div className="wheel" style={{ '--wsize': '56px' }}/>
                   <div style={{ flex: 1 }}>
                     <div className="strong">{v.make} {v.model} <span className="sub" style={{ fontWeight: 400 }}>· {v.year}</span></div>
-                    <div className="sub mono" style={{ fontSize: 12 }}>{v.plate} · {v.wheelSize} wheels</div>
+                    <div className="sub mono" style={{ fontSize: 12 }}>{v.plate} · {v.wheelSize} {t(lang,'c.wheels')}</div>
                   </div>
-                  {v.primary && <span className="pill pill-primary">Primary</span>}
+                  {v.primary && <span className="pill pill-primary">{t(lang,'c.primary')}</span>}
                 </div>
               ))}
               <div className="divider"/>
-              <Button icon="plus" kind="ghost" onClick={() => setRoute('garage')}>Manage vehicles</Button>
+              <Button icon="plus" kind="ghost" onClick={() => setRoute('garage')}>{t(lang,'dash.manageVehicles')}</Button>
             </div>
           </div>
 
           <div className="card card-lg">
             <div className="card-title">
-              Loyalty progress
+              {t(lang,'dash.loyaltyProgress')}
               <span className="pill pill-accent">{tier.name} · {tier.discount}%</span>
             </div>
             <div className="mono tabular" style={{ fontSize: 13, color: 'var(--muted)' }}>
@@ -6887,24 +6995,24 @@ function DashboardView({ state, setRoute, setState }) {
             </div>
             <div className="mt-4 sub" style={{ fontSize: 13 }}>
               {next
-                ? <>Spend <strong>{fmtMoney(next.minSpend - spend)}</strong> more to reach <strong>{next.name}</strong> and unlock <strong>{next.discount}%</strong> off.</>
-                : <>You're at the top tier. Gracias por tu confianza.</>}
+                ? <>Spend <strong>{fmtMoney(next.minSpend - spend)}</strong> {t(lang,'dash.spendMore')} <strong>{next.name}</strong> {t(lang,'dash.andUnlock')} <strong>{next.discount}%</strong> {t(lang,'c.off')}.</>
+                : t(lang,'dash.topTierMsg')}
             </div>
-            <Button kind="ghost" onClick={() => setRoute('loyalty')} style={{ marginTop: 12 }}>Program details →</Button>
+            <Button kind="ghost" onClick={() => setRoute('loyalty')} style={{ marginTop: 12 }}>{t(lang,'dash.programDetails')}</Button>
           </div>
 
           {lastVisit && (
             <div className="card card-lg" style={{ background: 'var(--surface-2)' }}>
-              <div className="eyebrow mb-2" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--muted)' }}>Last visit</div>
+              <div className="eyebrow mb-2" style={{ fontFamily: 'var(--font-mono)', fontSize: 10, textTransform: 'uppercase', letterSpacing: '.1em', color: 'var(--muted)' }}>{t(lang,'dash.lastVisit')}</div>
               <div className="strong mb-2">{lastVisit.serviceIds.map(id => serviceById(id)?.title).join(' + ')}</div>
               <div className="sub mb-4">
-                Handled by <strong>{lastVisit.tech}</strong> · {fmtDate(lastVisit.date, { weekday: false, year: true })}
+                {t(lang,'dash.handledBy')} <strong>{lastVisit.tech}</strong> · {fmtDate(lastVisit.date, { weekday: false, year: true }, lang)}
               </div>
               <div className="row gap-8">
                 {Array.from({length: 5}).map((_, i) => (
-                  <Icon key={i} name="star" size={16} className={i < lastVisit.rating ? '' : ''}/>
+                  <Icon key={i} name="star" size={16}/>
                 ))}
-                <span className="sub mono" style={{ fontSize: 12 }}>{lastVisit.rating}.0 — your rating</span>
+                <span className="sub mono" style={{ fontSize: 12 }}>{lastVisit.rating}.0 — {t(lang,'dash.yourRating')}</span>
               </div>
             </div>
           )}
@@ -6914,7 +7022,7 @@ function DashboardView({ state, setRoute, setState }) {
   );
 }
 
-function UpcomingBooking({ b, state, setState, setRoute }) {
+function UpcomingBooking({ b, state, setState, setRoute, lang }) {
   const v = vehicleById(state, b.vehicleId);
   const services = b.serviceIds.map(id => serviceById(id)).filter(Boolean);
   const d = new Date(b.date);
@@ -6922,26 +7030,26 @@ function UpcomingBooking({ b, state, setState, setRoute }) {
     setState(s => ({
       ...s,
       bookings: s.bookings.filter(x => x.id !== b.id),
-      toasts: [...s.toasts, { id: Date.now(), msg: 'Booking cancelled', icon: 'x' }],
+      toasts: [...s.toasts, { id: Date.now(), msg: t(lang,'dash.bookingCancelled'), icon: 'x' }],
     }));
   };
   return (
     <div className="booking">
       <div className="booking-date">
         <div className="bd-d">{d.getDate()}</div>
-        <div className="bd-m">{d.toLocaleDateString('en-GB', { month: 'short' })}</div>
+        <div className="bd-m">{d.toLocaleDateString(typeof LANG_LOCALE !== 'undefined' ? LANG_LOCALE[lang] : 'en-GB', { month: 'short' })}</div>
       </div>
       <div className="booking-main">
         <div className="booking-title">{services.map(s => s.title).join(' + ')}</div>
         <div className="booking-meta">
           <span><Icon name="clock" size={13}/> {b.time}</span>
           <span><Icon name="car" size={13}/> {v?.plate} · {v?.make} {v?.model}</span>
-          <span className="pill pill-olive"><span className="dot" style={{background:'var(--olive)'}}/>Confirmed</span>
+          <span className="pill pill-olive"><span className="dot" style={{background:'var(--olive)'}}/>  {t(lang,'c.confirmed')}</span>
         </div>
       </div>
       <div className="row gap-8">
-        <Button size="sm" icon="edit" onClick={() => setRoute('booking', { editId: b.id })}>Edit</Button>
-        <Button size="sm" kind="danger" icon="x" onClick={cancel}>Cancel</Button>
+        <Button size="sm" icon="edit" onClick={() => setRoute('booking', { editId: b.id })}>{t(lang,'c.edit')}</Button>
+        <Button size="sm" kind="danger" icon="x" onClick={cancel}>{t(lang,'c.cancel')}</Button>
       </div>
     </div>
   );
@@ -6951,10 +7059,11 @@ Object.assign(window, { DashboardView });
 
 </script>
 <script type="text/babel" data-src="src/views/booking.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-3">
-/* global React, Icon, Button, Modal, monthMatrix, isoDate */
+
+/* global React, Icon, Button, Modal, monthMatrix, isoDate, t */
 const { useState: useStateBk, useMemo: useMemoBk, useEffect: useEffectBk } = React;
 
-function BookingView({ state, setState, setRoute, initial }) {
+function BookingView({ state, setState, setRoute, initial, lang }) {
   const editing = initial?.editId ? state.bookings.find(b => b.id === initial.editId) : null;
   const prefillService = initial?.serviceId;
 
@@ -6965,15 +7074,25 @@ function BookingView({ state, setState, setRoute, initial }) {
     editing?.vehicleId || state.vehicles.find(v => v.primary)?.id || state.vehicles[0]?.id);
   const [note, setNote] = useStateBk(editing?.note || '');
 
-  // Calendar state
   const initDate = editing ? new Date(editing.date) : new Date();
   const [visYear, setVisYear] = useStateBk(initDate.getFullYear());
   const [visMonth, setVisMonth] = useStateBk(initDate.getMonth());
   const [selectedDate, setSelectedDate] = useStateBk(editing ? editing.date : '');
   const [selectedTime, setSelectedTime] = useStateBk(editing ? editing.time : '');
 
+  const locale = typeof LANG_LOCALE !== 'undefined' ? LANG_LOCALE[lang] : 'en-GB';
   const cells = useMemoBk(() => monthMatrix(visYear, visMonth), [visYear, visMonth]);
-  const monthLabel = new Date(visYear, visMonth, 1).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' });
+  const monthLabel = new Date(visYear, visMonth, 1).toLocaleDateString(locale, { month: 'long', year: 'numeric' });
+
+  // Localized Mon-Sun headers
+  const dowLabels = useMemoBk(() => {
+    const labels = [];
+    for (let i = 1; i <= 7; i++) {
+      const d = new Date(2024, 0, i); // Jan 1 2024 is Monday
+      labels.push(d.toLocaleDateString(locale, { weekday: 'short' }));
+    }
+    return labels;
+  }, [locale]);
 
   const todayIso = todayStr();
   const totalDuration = selectedServices.reduce((s, id) => s + (serviceById(id)?.duration || 0), 0);
@@ -6990,22 +7109,14 @@ function BookingView({ state, setState, setRoute, initial }) {
     [selectedDate, state.bookings, editing]
   );
 
-  const prevMonth = () => {
-    let m = visMonth - 1, y = visYear;
-    if (m < 0) { m = 11; y--; }
-    setVisMonth(m); setVisYear(y);
-  };
-  const nextMonth = () => {
-    let m = visMonth + 1, y = visYear;
-    if (m > 11) { m = 0; y++; }
-    setVisMonth(m); setVisYear(y);
-  };
+  const prevMonth = () => { let m = visMonth - 1, y = visYear; if (m < 0) { m = 11; y--; } setVisMonth(m); setVisYear(y); };
+  const nextMonth = () => { let m = visMonth + 1, y = visYear; if (m > 11) { m = 0; y++; } setVisMonth(m); setVisYear(y); };
 
   const pickDate = (cell) => {
     if (!cell.inMonth) return;
     const iso = isoDate(cell.date);
     if (iso < todayIso) return;
-    if (cell.date.getDay() === 0) return; // sunday closed
+    if (cell.date.getDay() === 0) return;
     setSelectedDate(iso);
     setSelectedTime('');
   };
@@ -7032,7 +7143,7 @@ function BookingView({ state, setState, setRoute, initial }) {
       }
       return {
         ...s, bookings, route: 'dashboard',
-        toasts: [...s.toasts, { id: Date.now(), msg: editing ? 'Booking updated' : 'Booking confirmed', icon: 'check' }],
+        toasts: [...s.toasts, { id: Date.now(), msg: editing ? t(lang,'book.updated') : t(lang,'book.confirmed'), icon: 'check' }],
       };
     });
   };
@@ -7042,28 +7153,22 @@ function BookingView({ state, setState, setRoute, initial }) {
       <div className="between mb-4">
         <div>
           <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>
-            {editing ? 'Editing booking' : 'New booking'}
+            {editing ? t(lang,'book.editing') : t(lang,'book.new')}
           </div>
           <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>
-            {editing ? 'Change your appointment' : 'Book your visit'}
+            {editing ? t(lang,'book.changeAppt') : t(lang,'book.bookVisit')}
           </h1>
         </div>
-        <Button kind="ghost" icon="arrow-left" onClick={() => setRoute('dashboard')}>Back</Button>
+        <Button kind="ghost" icon="arrow-left" onClick={() => setRoute('dashboard')}>{t(lang,'c.back')}</Button>
       </div>
 
       <div className="steps">
-        <div className={`step ${step === 1 ? 'step-active' : step > 1 ? 'step-done' : ''}`}>
-          <div className="step-num">{step > 1 ? '✓' : '1'}</div>
-          <span>Services & vehicle</span>
-        </div>
-        <div className={`step ${step === 2 ? 'step-active' : step > 2 ? 'step-done' : ''}`}>
-          <div className="step-num">{step > 2 ? '✓' : '2'}</div>
-          <span>Date & time</span>
-        </div>
-        <div className={`step ${step === 3 ? 'step-active' : ''}`}>
-          <div className="step-num">3</div>
-          <span>Confirm</span>
-        </div>
+        {[1,2,3].map(i => (
+          <div key={i} className={`step ${step === i ? 'step-active' : step > i ? 'step-done' : ''}`}>
+            <div className="step-num">{step > i ? '✓' : i}</div>
+            <span>{t(lang, `book.step${i}`)}</span>
+          </div>
+        ))}
       </div>
 
       <div className="grid" style={{ gridTemplateColumns: '1fr 360px', gap: 22, alignItems: 'start' }}>
@@ -7071,7 +7176,7 @@ function BookingView({ state, setState, setRoute, initial }) {
           {step === 1 && (
             <>
               <div className="card card-lg">
-                <div className="card-title">Choose services <span className="eyebrow">{selectedServices.length} selected</span></div>
+                <div className="card-title">{t(lang,'book.chooseServices')} <span className="eyebrow">{selectedServices.length} {t(lang,'book.selected')}</span></div>
                 <div className="grid grid-2">
                   {SERVICES.map(svc => {
                     const on = selectedServices.includes(svc.id);
@@ -7085,14 +7190,13 @@ function BookingView({ state, setState, setRoute, initial }) {
                           color: on ? 'var(--ink)' : 'inherit',
                           boxShadow: on ? '0 0 0 3px color-mix(in oklch, var(--primary) 18%, transparent)' : 'none',
                           transition: 'all .15s',
-                        }}
-                      >
+                        }}>
                         <div className="row between" style={{ marginBottom: 6 }}>
                           <span className="pill" style={{ background: 'transparent', borderColor: on ? 'var(--primary)' : 'var(--border)' }}>{svc.tag}</span>
                           <span className="mono strong">{fmtMoney(svc.price)}</span>
                         </div>
                         <div className="strong" style={{ fontSize: 14 }}>{svc.title}</div>
-                        <div className="sub" style={{ fontSize: 12, marginTop: 2 }}>{svc.subtitle} · {svc.duration} min</div>
+                        <div className="sub" style={{ fontSize: 12, marginTop: 2 }}>{svc.subtitle} · {svc.duration} {t(lang,'c.min')}</div>
                       </button>
                     );
                   })}
@@ -7100,7 +7204,7 @@ function BookingView({ state, setState, setRoute, initial }) {
               </div>
 
               <div className="card card-lg">
-                <div className="card-title">Vehicle</div>
+                <div className="card-title">{t(lang,'book.vehicle')}</div>
                 <div className="grid grid-2">
                   {state.vehicles.map(v => {
                     const on = vehicleId === v.id;
@@ -7111,8 +7215,7 @@ function BookingView({ state, setState, setRoute, initial }) {
                           border: `1px solid ${on ? 'var(--ink)' : 'var(--border)'}`,
                           background: on ? 'var(--surface-2)' : 'var(--surface)',
                           transition: 'all .15s',
-                        }}
-                      >
+                        }}>
                         <div className="row" style={{ gap: 12 }}>
                           <div className="wheel" style={{ '--wsize': '44px' }}/>
                           <div>
@@ -7133,7 +7236,7 @@ function BookingView({ state, setState, setRoute, initial }) {
               <div className="card card-lg">
                 <div className="cal-head between">
                   <div>
-                    <div className="sub mono" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '.1em' }}>Pick a day</div>
+                    <div className="sub mono" style={{ fontSize: 11, textTransform: 'uppercase', letterSpacing: '.1em' }}>{t(lang,'book.pickDay')}</div>
                     <div className="cal-title">{monthLabel}</div>
                   </div>
                   <div className="row gap-8">
@@ -7142,7 +7245,7 @@ function BookingView({ state, setState, setRoute, initial }) {
                   </div>
                 </div>
                 <div className="cal-grid">
-                  {['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map(d => <div key={d} className="cal-dow">{d}</div>)}
+                  {dowLabels.map(d => <div key={d} className="cal-dow">{d}</div>)}
                   {cells.map((c, i) => {
                     const iso = isoDate(c.date);
                     const isPast = iso < todayIso;
@@ -7155,16 +7258,9 @@ function BookingView({ state, setState, setRoute, initial }) {
                       <button key={i}
                         disabled={isOff}
                         onClick={() => pickDate(c)}
-                        className={[
-                          'cal-cell',
-                          isOff ? 'cal-cell-off' : '',
-                          isSel ? 'cal-cell-selected' : '',
-                          isToday ? 'cal-cell-today' : '',
-                          has && !isOff ? 'cal-cell-has' : '',
-                        ].join(' ')}
-                      >
+                        className={['cal-cell', isOff?'cal-cell-off':'', isSel?'cal-cell-selected':'', isToday?'cal-cell-today':'', has&&!isOff?'cal-cell-has':''].join(' ')}>
                         <div className="cal-cell-num">{c.day}</div>
-                        {isSun && c.inMonth && <div className="sub mono" style={{ fontSize: 9, marginTop: 'auto' }}>closed</div>}
+                        {isSun && c.inMonth && <div className="sub mono" style={{ fontSize: 9, marginTop: 'auto' }}>{t(lang,'book.closed')}</div>}
                       </button>
                     );
                   })}
@@ -7173,21 +7269,18 @@ function BookingView({ state, setState, setRoute, initial }) {
 
               <div className="card card-lg">
                 <div className="card-title">
-                  Available times
-                  <span className="eyebrow">{selectedDate ? fmtDate(selectedDate, { year: true }) : 'pick a day'}</span>
+                  {t(lang,'book.availableTimes')}
+                  <span className="eyebrow">{selectedDate ? fmtDate(selectedDate, { year: true }, lang) : t(lang,'book.pickDay')}</span>
                 </div>
-                {!selectedDate && <div className="sub">Choose a date to see open slots.</div>}
-                {selectedDate && slotInfo?.closed && <div className="sub">Closed on Sundays — please pick another day.</div>}
+                {!selectedDate && <div className="sub">{t(lang,'book.pickDayFirst')}</div>}
+                {selectedDate && slotInfo?.closed && <div className="sub">{t(lang,'book.sundayClosed')}</div>}
                 {selectedDate && !slotInfo?.closed && (
                   <div className="slots">
-                    {ALL_SLOTS.map(t => {
-                      const taken = slotInfo.taken.has(t);
-                      const sel = selectedTime === t;
+                    {ALL_SLOTS.map(tm => {
+                      const taken = slotInfo.taken.has(tm);
+                      const sel = selectedTime === tm;
                       return (
-                        <button key={t}
-                          className={`slot ${sel ? 'slot-selected' : ''}`}
-                          disabled={taken}
-                          onClick={() => setSelectedTime(t)}>{t}</button>
+                        <button key={tm} className={`slot ${sel ? 'slot-selected' : ''}`} disabled={taken} onClick={() => setSelectedTime(tm)}>{tm}</button>
                       );
                     })}
                   </div>
@@ -7198,58 +7291,55 @@ function BookingView({ state, setState, setRoute, initial }) {
 
           {step === 3 && (
             <div className="card card-lg">
-              <div className="card-title">Review & confirm</div>
-
+              <div className="card-title">{t(lang,'book.reviewConfirm')}</div>
               <div className="col" style={{ gap: 14 }}>
-                <SummaryRow label="When" icon="calendar"
-                  value={selectedDate ? <>{fmtDate(selectedDate, { year: true })} · <span className="mono">{selectedTime}</span></> : '—'}/>
-                <SummaryRow label="Vehicle" icon="car"
+                <SummaryRow label={t(lang,'book.when')} icon="calendar"
+                  value={selectedDate ? <>{fmtDate(selectedDate, { year: true }, lang)} · <span className="mono">{selectedTime}</span></> : '—'}/>
+                <SummaryRow label={t(lang,'book.vehicle')} icon="car"
                   value={(() => { const v = vehicleById(state, vehicleId); return v ? `${v.make} ${v.model} · ${v.plate}` : '—'; })()}/>
-                <SummaryRow label="Services" icon="wrench"
+                <SummaryRow label={t(lang,'book.services')} icon="wrench"
                   value={<div className="col" style={{ gap: 6 }}>
                     {selectedServices.map(id => {
                       const s = serviceById(id);
                       return <div key={id} className="between" style={{ fontSize: 13 }}>
-                        <span>{s.title} <span className="sub">· {s.duration} min</span></span>
+                        <span>{s.title} <span className="sub">· {s.duration} {t(lang,'c.min')}</span></span>
                         <span className="mono tabular">{fmtMoney(s.price)}</span>
                       </div>;
                     })}
                   </div>}/>
-                <SummaryRow label="Duration" icon="clock" value={`${Math.floor(totalDuration/60)}h ${totalDuration%60}m`}/>
+                <SummaryRow label={t(lang,'book.duration')} icon="clock"
+                  value={`${Math.floor(totalDuration/60)}h ${totalDuration%60}${t(lang,'c.min')}`}/>
               </div>
-
               <div className="field mt-4">
-                <label>Note for the technician (optional)</label>
-                <textarea className="input" rows={3} value={note} onChange={e => setNote(e.target.value)}
-                  placeholder="e.g. one wheel has a repaired kerb scuff on the inner rim"/>
+                <label>{t(lang,'book.note')}</label>
+                <textarea className="input" rows={3} value={note} onChange={e => setNote(e.target.value)} placeholder={t(lang,'book.notePh')}/>
               </div>
             </div>
           )}
 
           <div className="row between mt-2">
             {step > 1
-              ? <Button kind="ghost" icon="arrow-left" onClick={() => setStep(s => s - 1)}>Back</Button>
+              ? <Button kind="ghost" icon="arrow-left" onClick={() => setStep(s => s - 1)}>{t(lang,'c.back')}</Button>
               : <div/>}
             {step < 3 && (
               <Button kind="primary" size="lg" icon="arrow-right"
                 disabled={step === 1 ? !canStep2 : !canStep3}
                 onClick={() => setStep(s => s + 1)}>
-                Continue
+                {t(lang,'c.continue')}
               </Button>
             )}
             {step === 3 && (
               <Button kind="primary" size="lg" icon="check" onClick={submit}>
-                {editing ? 'Save changes' : 'Confirm booking'}
+                {editing ? t(lang,'book.saveChanges') : t(lang,'book.confirmBooking')}
               </Button>
             )}
           </div>
         </div>
 
-        {/* Right column: live summary */}
         <div style={{ position: 'sticky', top: 92 }}>
           <div className="card card-lg">
-            <div className="card-title">Order summary</div>
-            {selectedServices.length === 0 && <div className="sub">Pick at least one service to begin.</div>}
+            <div className="card-title">{t(lang,'book.orderSummary')}</div>
+            {selectedServices.length === 0 && <div className="sub">{t(lang,'book.pickService')}</div>}
             {selectedServices.map(id => {
               const s = serviceById(id);
               return (
@@ -7262,22 +7352,20 @@ function BookingView({ state, setState, setRoute, initial }) {
             {selectedServices.length > 0 && (
               <>
                 <div className="between" style={{ marginTop: 10, fontSize: 13 }}>
-                  <span className="sub">Subtotal</span>
+                  <span className="sub">{t(lang,'book.subtotal')}</span>
                   <span className="mono tabular">{fmtMoney(subtotal)}</span>
                 </div>
                 {tier.discount > 0 && (
                   <div className="between" style={{ marginTop: 4, fontSize: 13, color: 'var(--olive)' }}>
-                    <span>Loyalty — {tier.name} · −{tier.discount}%</span>
+                    <span>{t(lang,'book.loyalty')} — {tier.name} · −{tier.discount}%</span>
                     <span className="mono tabular">−{fmtMoney(discount)}</span>
                   </div>
                 )}
                 <div className="between mt-4" style={{ fontSize: 18, fontWeight: 600 }}>
-                  <span>Total</span>
+                  <span>{t(lang,'book.total')}</span>
                   <span className="mono tabular">{fmtMoney(total)}</span>
                 </div>
-                <div className="sub mt-2" style={{ fontSize: 11 }}>
-                  Final price confirmed on inspection. No charge until completion.
-                </div>
+                <div className="sub mt-2" style={{ fontSize: 11 }}>{t(lang,'book.finalNote')}</div>
               </>
             )}
           </div>
@@ -7318,10 +7406,11 @@ Object.assign(window, { BookingView });
 
 </script>
 <script type="text/babel" data-src="src/views/garage.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-4">
-/* global React, Icon, Button, Modal */
+
+/* global React, Icon, Button, Modal, t */
 const { useState: useStateGar } = React;
 
-function GarageView({ state, setState }) {
+function GarageView({ state, setState, lang }) {
   const [editing, setEditing] = useStateGar(null);
   const [form, setForm] = useStateGar(null);
 
@@ -7340,7 +7429,7 @@ function GarageView({ state, setState }) {
         vehicles = [...vehicles, { ...form, id: 'v' + Math.random().toString(36).slice(2, 7) }];
       }
       if (form.primary) vehicles = vehicles.map(v => ({ ...v, primary: v.id === (editing.id || vehicles[vehicles.length-1].id) }));
-      return { ...s, vehicles, toasts: [...s.toasts, { id: Date.now(), msg: editing.id ? 'Vehicle updated' : 'Vehicle added', icon: 'check' }] };
+      return { ...s, vehicles, toasts: [...s.toasts, { id: Date.now(), msg: editing.id ? t(lang,'gar.vehicleUpdated') : t(lang,'gar.vehicleAdded'), icon: 'check' }] };
     });
     close();
   };
@@ -7348,41 +7437,43 @@ function GarageView({ state, setState }) {
     setState(s => ({
       ...s,
       vehicles: s.vehicles.filter(v => v.id !== editing.id),
-      toasts: [...s.toasts, { id: Date.now(), msg: 'Vehicle removed', icon: 'trash' }],
+      toasts: [...s.toasts, { id: Date.now(), msg: t(lang,'gar.vehicleRemoved'), icon: 'trash' }],
     }));
     close();
   };
+
+  const locale = typeof LANG_LOCALE !== 'undefined' ? LANG_LOCALE[lang] : 'en-GB';
 
   return (
     <div className="view">
       <div className="between mb-4">
         <div>
-          <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>My account</div>
-          <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>Profile & garage</h1>
+          <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>{t(lang,'gar.myAccount')}</div>
+          <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>{t(lang,'gar.profileGarage')}</h1>
         </div>
-        <Button kind="primary" icon="plus" onClick={() => openEdit(null)}>Add vehicle</Button>
+        <Button kind="primary" icon="plus" onClick={() => openEdit(null)}>{t(lang,'gar.addVehicle')}</Button>
       </div>
 
       <div className="grid" style={{ gridTemplateColumns: '360px 1fr', gap: 22 }}>
         <div className="card card-lg">
-          <div className="card-title">Personal details</div>
+          <div className="card-title">{t(lang,'gar.personalDetails')}</div>
           <div className="row" style={{ gap: 14, marginBottom: 16 }}>
             <div className="avatar" style={{ width: 56, height: 56, fontSize: 18 }}>{state.user.name.split(' ').map(p => p[0]).join('')}</div>
             <div>
               <div className="strong" style={{ fontSize: 16 }}>{state.user.name}</div>
-              <div className="sub mono" style={{ fontSize: 11 }}>Member since {new Date(state.user.joined).toLocaleDateString('en-GB', { month: 'long', year: 'numeric' })}</div>
+              <div className="sub mono" style={{ fontSize: 11 }}>{t(lang,'gar.memberSince')} {new Date(state.user.joined).toLocaleDateString(locale, { month: 'long', year: 'numeric' })}</div>
             </div>
           </div>
           <div className="col" style={{ gap: 10 }}>
-            <ProfileRow icon="mail" label="Email" value={state.user.email}/>
-            <ProfileRow icon="phone" label="Phone" value={state.user.phone}/>
-            <ProfileRow icon="medal" label="Tier" value={<span className="pill pill-primary">{currentTier(totalSpend(state.history)).name}</span>}/>
+            <ProfileRow icon="mail"  label={t(lang,'gar.email')} value={state.user.email}/>
+            <ProfileRow icon="phone" label={t(lang,'gar.phone')} value={state.user.phone}/>
+            <ProfileRow icon="medal" label={t(lang,'gar.tier')}  value={<span className="pill pill-primary">{currentTier(totalSpend(state.history)).name}</span>}/>
           </div>
-          <Button kind="ghost" icon="edit" style={{ marginTop: 14 }}>Edit profile</Button>
+          <Button kind="ghost" icon="edit" style={{ marginTop: 14 }}>{t(lang,'gar.editProfile')}</Button>
         </div>
 
         <div className="card card-lg">
-          <div className="card-title">Vehicles <span className="eyebrow">{state.vehicles.length} on file</span></div>
+          <div className="card-title">{t(lang,'gar.vehicles')} <span className="eyebrow">{state.vehicles.length} {t(lang,'gar.onFile')}</span></div>
           <div className="col">
             {state.vehicles.map(v => (
               <div key={v.id} className="booking">
@@ -7390,44 +7481,44 @@ function GarageView({ state, setState }) {
                 <div className="booking-main">
                   <div className="booking-title">
                     {v.make} {v.model} <span className="sub" style={{ fontWeight: 400 }}>· {v.year}</span>
-                    {v.primary && <span className="pill pill-primary" style={{ marginLeft: 8 }}>Primary</span>}
+                    {v.primary && <span className="pill pill-primary" style={{ marginLeft: 8 }}>{t(lang,'c.primary')}</span>}
                   </div>
                   <div className="booking-meta">
                     <span className="mono">{v.plate}</span>
-                    <span>{v.wheelSize} wheels</span>
+                    <span>{v.wheelSize} {t(lang,'c.wheels')}</span>
                   </div>
                 </div>
-                <Button size="sm" icon="edit" onClick={() => openEdit(v)}>Edit</Button>
+                <Button size="sm" icon="edit" onClick={() => openEdit(v)}>{t(lang,'c.edit')}</Button>
               </div>
             ))}
-            {state.vehicles.length === 0 && <div className="sub">No vehicles yet.</div>}
+            {state.vehicles.length === 0 && <div className="sub">{t(lang,'gar.noVehicles')}</div>}
           </div>
         </div>
       </div>
 
       {form && (
         <Modal open={true} onClose={close}
-          title={editing.id ? 'Edit vehicle' : 'Add a vehicle'}
-          subtitle="Your saved vehicles pre-fill bookings and service history."
+          title={editing.id ? t(lang,'gar.editVehicle') : t(lang,'gar.addVehicleTitle')}
+          subtitle={t(lang,'gar.vehicleSub')}
           footer={<>
-            {editing.id && <Button kind="danger" icon="trash" onClick={remove} style={{ marginRight: 'auto' }}>Remove</Button>}
-            <Button kind="ghost" onClick={close}>Cancel</Button>
-            <Button kind="primary" icon="check" onClick={save} disabled={!form.plate || !form.make}>Save</Button>
+            {editing.id && <Button kind="danger" icon="trash" onClick={remove} style={{ marginRight: 'auto' }}>{t(lang,'c.remove')}</Button>}
+            <Button kind="ghost" onClick={close}>{t(lang,'c.cancel')}</Button>
+            <Button kind="primary" icon="check" onClick={save} disabled={!form.plate || !form.make}>{t(lang,'c.save')}</Button>
           </>}>
           <div className="grid grid-2" style={{ gap: 12 }}>
-            <div className="field"><label>Plate</label><input className="input mono" value={form.plate} onChange={e => setForm({ ...form, plate: e.target.value.toUpperCase() })}/></div>
-            <div className="field"><label>Year</label><input className="input mono" type="number" value={form.year} onChange={e => setForm({ ...form, year: +e.target.value })}/></div>
-            <div className="field"><label>Make</label><input className="input" value={form.make} onChange={e => setForm({ ...form, make: e.target.value })}/></div>
-            <div className="field"><label>Model</label><input className="input" value={form.model} onChange={e => setForm({ ...form, model: e.target.value })}/></div>
-            <div className="field"><label>Wheel size</label>
+            <div className="field"><label>{t(lang,'gar.plate')}</label><input className="input mono" value={form.plate} onChange={e => setForm({ ...form, plate: e.target.value.toUpperCase() })}/></div>
+            <div className="field"><label>{t(lang,'gar.year')}</label><input className="input mono" type="number" value={form.year} onChange={e => setForm({ ...form, year: +e.target.value })}/></div>
+            <div className="field"><label>{t(lang,'gar.make')}</label><input className="input" value={form.make} onChange={e => setForm({ ...form, make: e.target.value })}/></div>
+            <div className="field"><label>{t(lang,'gar.model')}</label><input className="input" value={form.model} onChange={e => setForm({ ...form, model: e.target.value })}/></div>
+            <div className="field"><label>{t(lang,'gar.wheelSize')}</label>
               <select className="select" value={form.wheelSize} onChange={e => setForm({ ...form, wheelSize: e.target.value })}>
                 {['15"','16"','17"','18"','19"','20"','21"','22"'].map(s => <option key={s}>{s}</option>)}
               </select>
             </div>
-            <div className="field"><label>Primary</label>
+            <div className="field"><label>{t(lang,'c.primary')}</label>
               <label className="row gap-8" style={{ paddingTop: 8 }}>
                 <input type="checkbox" checked={!!form.primary} onChange={e => setForm({ ...form, primary: e.target.checked })}/>
-                <span className="sub">Set as default vehicle</span>
+                <span className="sub">{t(lang,'gar.primaryLabel')}</span>
               </label>
             </div>
           </div>
@@ -7455,10 +7546,11 @@ Object.assign(window, { GarageView });
 
 </script>
 <script type="text/babel" data-src="src/views/history.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-5">
-/* global React, Icon, Button */
+
+/* global React, Icon, Button, t */
 const { useState: useStateHist, useMemo: useMemoHist } = React;
 
-function HistoryView({ state }) {
+function HistoryView({ state, lang }) {
   const [filter, setFilter] = useStateHist('all');
   const [vehFilter, setVehFilter] = useStateHist('all');
 
@@ -7475,7 +7567,8 @@ function HistoryView({ state }) {
   const countAlloy = state.history.filter(h => h.serviceIds.some(id => serviceById(id)?.category === 'Alloy Restoration')).length;
   const countTires = state.history.filter(h => h.serviceIds.some(id => serviceById(id)?.category === 'Tire Service')).length;
 
-  // Monthly spend mini chart data (last 12 months)
+  const locale = typeof LANG_LOCALE !== 'undefined' ? LANG_LOCALE[lang] : 'en-GB';
+
   const chartData = useMemoHist(() => {
     const months = [];
     const now = new Date();
@@ -7485,39 +7578,39 @@ function HistoryView({ state }) {
       const total = state.history
         .filter(h => h.date.startsWith(key))
         .reduce((s, h) => s + h.total, 0);
-      months.push({ key, label: d.toLocaleDateString('en', { month: 'short' }), total });
+      months.push({ key, label: d.toLocaleDateString(locale, { month: 'short' }), total });
     }
     return months;
-  }, [state.history]);
+  }, [state.history, locale]);
   const maxVal = Math.max(...chartData.map(m => m.total), 1);
 
   return (
     <div className="view">
       <div className="mb-4">
-        <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>History</div>
-        <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>Visits & work log</h1>
+        <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>{t(lang,'page.history.title')}</div>
+        <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>{t(lang,'page.history.sub')}</h1>
       </div>
 
       <div className="grid grid-3 mb-4">
         <div className="kpi">
-          <div className="kpi-label">Total lifetime spend</div>
+          <div className="kpi-label">{t(lang,'hist.totalSpend')}</div>
           <div className="kpi-value mono tabular">{fmtMoney(totalSpend(state.history))}</div>
-          <div className="kpi-foot">across {state.history.length} visits</div>
+          <div className="kpi-foot">{t(lang,'hist.across')} {state.history.length} {t(lang,'hist.visits')}</div>
         </div>
         <div className="kpi">
-          <div className="kpi-label">Alloy work</div>
+          <div className="kpi-label">{t(lang,'hist.alloyWork')}</div>
           <div className="kpi-value mono tabular">{countAlloy}</div>
-          <div className="kpi-foot">restoration, repair, paint</div>
+          <div className="kpi-foot">{t(lang,'hist.restorationRepairPaint')}</div>
         </div>
         <div className="kpi">
-          <div className="kpi-label">Tire service</div>
+          <div className="kpi-label">{t(lang,'hist.tireService')}</div>
           <div className="kpi-value mono tabular">{countTires}</div>
-          <div className="kpi-foot">changes, alignment, repair</div>
+          <div className="kpi-foot">{t(lang,'hist.changesAlignmentRepair')}</div>
         </div>
       </div>
 
       <div className="card card-lg mb-4">
-        <div className="card-title">Monthly spend — last 12 months <span className="eyebrow">€</span></div>
+        <div className="card-title">{t(lang,'hist.monthly')} <span className="eyebrow">€</span></div>
         <div className="row" style={{ alignItems: 'flex-end', gap: 8, height: 140 }}>
           {chartData.map((m, i) => {
             const h = Math.round((m.total / maxVal) * 120) + (m.total > 0 ? 8 : 2);
@@ -7540,20 +7633,20 @@ function HistoryView({ state }) {
 
       <div className="card card-lg">
         <div className="row between mb-4">
-          <div className="card-title mb-0">All visits <span className="eyebrow">{items.length} results · {fmtMoney(spend)}</span></div>
+          <div className="card-title mb-0">{t(lang,'hist.allVisits')} <span className="eyebrow">{items.length} {t(lang,'hist.results')} · {fmtMoney(spend)}</span></div>
           <div className="row gap-8">
             <div className="row gap-8" style={{ padding: 4, background: 'var(--surface-2)', borderRadius: 10 }}>
-              {[['all','All'],['alloy','Alloy'],['tires','Tires']].map(([k,l]) => (
+              {[['all','hist.filter.all'],['alloy','hist.filter.alloy'],['tires','hist.filter.tire']].map(([k,lk]) => (
                 <button key={k}
                   onClick={() => setFilter(k)}
                   className="btn btn-sm"
                   style={{ background: filter === k ? 'var(--surface)' : 'transparent', border: 'none', color: filter === k ? 'var(--ink)' : 'var(--muted)' }}>
-                  {l}
+                  {t(lang,lk)}
                 </button>
               ))}
             </div>
             <select className="select" value={vehFilter} onChange={e => setVehFilter(e.target.value)}>
-              <option value="all">All vehicles</option>
+              <option value="all">{t(lang,'hist.filter.allVeh')}</option>
               {state.vehicles.map(v => <option key={v.id} value={v.id}>{v.plate} · {v.make}</option>)}
             </select>
           </div>
@@ -7561,12 +7654,12 @@ function HistoryView({ state }) {
         <table className="tbl">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Work performed</th>
-              <th>Vehicle</th>
-              <th>Technician</th>
-              <th>Rating</th>
-              <th style={{ textAlign: 'right' }}>Total</th>
+              <th>{t(lang,'tbl.date')}</th>
+              <th>{t(lang,'tbl.work')}</th>
+              <th>{t(lang,'tbl.vehicle')}</th>
+              <th>{t(lang,'tbl.tech')}</th>
+              <th>{t(lang,'tbl.rating')}</th>
+              <th style={{ textAlign: 'right' }}>{t(lang,'tbl.total')}</th>
             </tr>
           </thead>
           <tbody>
@@ -7574,12 +7667,12 @@ function HistoryView({ state }) {
               const v = vehicleById(state, h.vehicleId);
               return (
                 <tr key={h.id}>
-                  <td className="mono">{fmtDate(h.date, { year: true })}</td>
+                  <td className="mono">{fmtDate(h.date, { year: true }, lang)}</td>
                   <td>
                     <div className="col" style={{ gap: 2 }}>
                       {h.serviceIds.map(id => {
                         const s = serviceById(id);
-                        return <span key={id}>{s?.title} <span className="pill" style={{ marginLeft: 6 }}>{s?.category === 'Alloy Restoration' ? 'Alloy' : 'Tires'}</span></span>;
+                        return <span key={id}>{s?.title} <span className="pill" style={{ marginLeft: 6 }}>{s?.category === 'Alloy Restoration' ? t(lang,'hist.alloyTag') : t(lang,'hist.tiresTag')}</span></span>;
                       })}
                     </div>
                   </td>
@@ -7605,9 +7698,10 @@ Object.assign(window, { HistoryView });
 
 </script>
 <script type="text/babel" data-src="src/views/loyalty.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-6">
-/* global React, Icon, Button */
 
-function LoyaltyView({ state }) {
+/* global React, Icon, Button, t */
+
+function LoyaltyView({ state, lang }) {
   const spend = totalSpend(state.history);
   const tier = currentTier(spend);
   const next = nextTier(spend);
@@ -7618,62 +7712,60 @@ function LoyaltyView({ state }) {
   return (
     <div className="view">
       <div className="mb-4">
-        <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>Loyalty program</div>
-        <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>Club Rueda</h1>
+        <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>{t(lang,'loy.program')}</div>
+        <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>{t(lang,'loy.clubTitle')}</h1>
       </div>
 
       <div className="grid" style={{ gridTemplateColumns: '1.2fr 1fr', gap: 22 }}>
         <div className="loy-card">
           <div className="row between" style={{ alignItems: 'flex-start' }}>
             <div>
-              <div className="mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.15em', opacity: .8 }}>Member tier</div>
+              <div className="mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.15em', opacity: .8 }}>{t(lang,'loy.memberTier')}</div>
               <div className="loy-tier-name mt-2">{tier.name}</div>
-              <div className="mono mt-2" style={{ fontSize: 12, opacity: .85 }}>{state.user.name.toUpperCase()} · since {new Date(state.user.joined).getFullYear()}</div>
+              <div className="mono mt-2" style={{ fontSize: 12, opacity: .85 }}>{state.user.name.toUpperCase()} · {t(lang,'loy.since')} {new Date(state.user.joined).getFullYear()}</div>
             </div>
             <div className="wheel" style={{ '--wsize': '80px', border: '3px solid #fff5e3', filter: 'brightness(1.3) saturate(.7)' }}/>
           </div>
           <div className="mt-4" style={{ marginTop: 30 }}>
             <div className="row between" style={{ fontSize: 12, opacity: .85 }}>
-              <span className="mono">{fmtMoney(spend)} lifetime</span>
-              {next ? <span className="mono">→ {next.name} at {fmtMoney(next.minSpend)}</span> : <span className="mono">top tier</span>}
+              <span className="mono">{fmtMoney(spend)} {t(lang,'loy.lifetime')}</span>
+              {next ? <span className="mono">→ {next.name} at {fmtMoney(next.minSpend)}</span> : <span className="mono">{t(lang,'loy.topTier')}</span>}
             </div>
             <div className="loy-bar">
               <div className="loy-bar-fill" style={{ width: `${Math.round(progress * 100)}%` }}/>
             </div>
             <div className="mt-2" style={{ fontSize: 13, opacity: .9 }}>
               {next
-                ? `${fmtMoney(next.minSpend - spend)} to unlock ${next.discount}% off everything`
-                : `You're enjoying the maximum ${tier.discount}% discount.`}
+                ? `${fmtMoney(next.minSpend - spend)} ${t(lang,'loy.toUnlock')} ${next.discount}% ${t(lang,'loy.offEverything')}`
+                : `${t(lang,'loy.maxDiscount')} ${tier.discount}% ${t(lang,'loy.discount')}`}
             </div>
           </div>
         </div>
 
         <div className="col">
           <div className="card card-lg">
-            <div className="card-title">Your points</div>
+            <div className="card-title">{t(lang,'loy.points')}</div>
             <div className="row" style={{ gap: 24, padding: '8px 0' }}>
               <div>
-                <div className="sub mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.1em' }}>Earned</div>
+                <div className="sub mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.1em' }}>{t(lang,'loy.earned')}</div>
                 <div className="mono tabular" style={{ fontSize: 28, fontWeight: 600 }}>{pointsEarned}</div>
               </div>
               <div style={{ width: 1, background: 'var(--border)', alignSelf: 'stretch' }}/>
               <div>
-                <div className="sub mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.1em' }}>Redeemable</div>
+                <div className="sub mono" style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '.1em' }}>{t(lang,'loy.redeemable')}</div>
                 <div className="mono tabular" style={{ fontSize: 28, fontWeight: 600, color: 'var(--primary)' }}>€{pointsRedeemable}</div>
               </div>
             </div>
-            <div className="sub" style={{ fontSize: 12 }}>
-              Earn 1 point per euro spent. Redeem every 10 points as €1 off your next visit.
-            </div>
-            <Button kind="primary" icon="spark" style={{ marginTop: 14 }}>Redeem at next visit</Button>
+            <div className="sub" style={{ fontSize: 12 }}>{t(lang,'loy.pointsHelp')}</div>
+            <Button kind="primary" icon="spark" style={{ marginTop: 14 }}>{t(lang,'loy.redeem')}</Button>
           </div>
 
           <div className="card card-lg">
-            <div className="card-title">Referrals</div>
-            <div className="sub mb-4">Refer a friend. When they complete their first visit, you both receive <strong style={{ color: 'var(--ink)' }}>€20 credit</strong>.</div>
+            <div className="card-title">{t(lang,'loy.referrals')}</div>
+            <div className="sub mb-4">{t(lang,'loy.refHelp')} <strong style={{ color: 'var(--ink)' }}>€20 {t(lang,'loy.credit')}</strong>.</div>
             <div className="row gap-8">
               <input className="input mono" value="RUEDA-LUCIA-2026" readOnly style={{ flex: 1, fontSize: 13 }}/>
-              <Button kind="primary">Copy</Button>
+              <Button kind="primary">{t(lang,'c.copy')}</Button>
             </div>
           </div>
         </div>
@@ -7681,28 +7773,28 @@ function LoyaltyView({ state }) {
 
       <div className="mt-4" style={{ marginTop: 28 }}>
         <div className="card-title mb-4">
-          All tiers
-          <span className="eyebrow">4 levels · benefits stack within tier</span>
+          {t(lang,'loy.allTiers')}
+          <span className="eyebrow">{t(lang,'loy.tiersSub')}</span>
         </div>
         <div className="tiers">
-          {TIERS.map((t, i) => {
-            const isCurrent = t.name === tier.name;
+          {TIERS.map((tr, i) => {
+            const isCurrent = tr.name === tier.name;
             return (
-              <div key={t.name} className={`tier ${isCurrent ? 'tier-current' : ''}`}>
+              <div key={tr.name} className={`tier ${isCurrent ? 'tier-current' : ''}`}>
                 <div className="tier-name">
                   <span style={{
                     width: 22, height: 22, borderRadius: '50%',
                     background: ['#a7b05b','#c96826','#d69314','#1f3a5f'][i],
                     display: 'inline-block', flex: 'none'
                   }}/>
-                  {t.name}
-                  {isCurrent && <span className="pill pill-primary">Current</span>}
+                  {tr.name}
+                  {isCurrent && <span className="pill pill-primary">{t(lang,'loy.current')}</span>}
                 </div>
                 <div className="tier-thresh mt-2">
-                  {t.minSpend === 0 ? 'Welcome level' : `From ${fmtMoney(t.minSpend)} lifetime`} · {t.discount}% off
+                  {tr.minSpend === 0 ? t(lang,'loy.welcomeLevel') : `${t(lang,'loy.fromLifetime')} ${fmtMoney(tr.minSpend)} ${t(lang,'loy.lifetime')}`} · {tr.discount}% {t(lang,'c.off')}
                 </div>
                 <ul className="tier-perks">
-                  {t.perks.map((p, j) => <li key={j}>{p}</li>)}
+                  {tr.perks.map((p, j) => <li key={j}>{p}</li>)}
                 </ul>
               </div>
             );
@@ -7717,10 +7809,11 @@ Object.assign(window, { LoyaltyView });
 
 </script>
 <script type="text/babel" data-src="src/views/services.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-7">
-/* global React, Icon, Button */
+
+/* global React, Icon, Button, t */
 const { useState: useStateSvc } = React;
 
-function ServicesView({ setRoute }) {
+function ServicesView({ setRoute, lang }) {
   const [cat, setCat] = useStateSvc('all');
   const cats = ['all', ...Array.from(new Set(SERVICES.map(s => s.category)))];
   const items = SERVICES.filter(s => cat === 'all' || s.category === cat);
@@ -7728,12 +7821,9 @@ function ServicesView({ setRoute }) {
   return (
     <div className="view">
       <div className="mb-4">
-        <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>Catalogue</div>
-        <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>Services — alloy wheels & tires</h1>
-        <p className="sub mt-2" style={{ maxWidth: 620 }}>
-          From kerb-rash spot repair to full restoration with diamond-cut finish or custom paint.
-          Every alloy service includes strip, inspection, primer, colour, two-layer clear lacquer — turnkey.
-        </p>
+        <div className="sub mono" style={{ letterSpacing: '.1em', textTransform: 'uppercase', fontSize: 11 }}>{t(lang,'svc.catalogue')}</div>
+        <h1 style={{ fontSize: 28, margin: '6px 0 0', fontWeight: 600, letterSpacing: '-.015em' }}>{t(lang,'svc.title')}</h1>
+        <p className="sub mt-2" style={{ maxWidth: 620 }}>{t(lang,'svc.intro')}</p>
       </div>
 
       <div className="row gap-8 mb-4" style={{ flexWrap: 'wrap' }}>
@@ -7744,7 +7834,7 @@ function ServicesView({ setRoute }) {
               color: cat === c ? 'var(--bg)' : 'var(--ink-2)',
               borderColor: cat === c ? 'var(--ink)' : 'var(--border)',
             }}>
-            {c === 'all' ? 'All services' : c}
+            {c === 'all' ? t(lang,'svc.all') : c}
           </button>
         ))}
       </div>
@@ -7754,7 +7844,7 @@ function ServicesView({ setRoute }) {
           <div key={s.id} className="svc">
             <div className="svc-hero">
               <div className="svc-hero-tag"><span className="pill pill-primary">{s.tag}</span></div>
-              {s.featured && <div style={{ position: 'absolute', top: 12, right: 12 }}><span className="pill pill-accent">★ Turnkey</span></div>}
+              {s.featured && <div style={{ position: 'absolute', top: 12, right: 12 }}><span className="pill pill-accent">{t(lang,'svc.featured')}</span></div>}
               <div className="row" style={{ gap: 14, alignItems: 'center' }}>
                 <div className="wheel" style={{ '--wsize': '100px' }}/>
                 <div className="col" style={{ gap: 4, textAlign: 'left' }}>
@@ -7768,12 +7858,12 @@ function ServicesView({ setRoute }) {
               <div className="sub" style={{ fontSize: 12.5 }}>{s.subtitle}</div>
               <div className="svc-desc">{s.desc}</div>
               <div className="row gap-8" style={{ flexWrap: 'wrap', marginTop: 4 }}>
-                <span className="pill"><Icon name="clock" size={11}/> {s.duration} min</span>
+                <span className="pill"><Icon name="clock" size={11}/> {s.duration} {t(lang,'c.min')}</span>
                 <span className="pill">{s.unit}</span>
               </div>
               <div className="svc-foot">
-                <div className="svc-price"><small>from</small> {fmtMoney(s.price)}</div>
-                <Button kind="primary" size="sm" icon="calendar" onClick={() => setRoute('booking', { serviceId: s.id })}>Book</Button>
+                <div className="svc-price"><small>{t(lang,'c.from')}</small> {fmtMoney(s.price)}</div>
+                <Button kind="primary" size="sm" icon="calendar" onClick={() => setRoute('booking', { serviceId: s.id })}>{t(lang,'svc.book')}</Button>
               </div>
             </div>
           </div>
@@ -7787,29 +7877,35 @@ Object.assign(window, { ServicesView });
 
 </script>
 <script type="text/babel" data-src="src/app.jsx" data-plugins="transform-react-jsx-source" data-filename="inline-8">
+
 /* global React, ReactDOM, Icon, Button, Toasts,
    DashboardView, BookingView, GarageView, HistoryView, LoyaltyView, ServicesView,
-   loadState, saveState, totalSpend, currentTier */
+   loadState, saveState, totalSpend, currentTier,
+   t, LANG_LABEL, LANG_CODE */
 
 const { useState, useEffect, useMemo, useCallback } = React;
 
 const NAV = [
-  { id: 'dashboard', label: 'Dashboard', icon: 'home', group: 'main' },
-  { id: 'booking',   label: 'Book a slot', icon: 'calendar', group: 'main' },
-  { id: 'services',  label: 'Services', icon: 'layers', group: 'main' },
-  { id: 'garage',    label: 'My garage', icon: 'car', group: 'account' },
-  { id: 'history',   label: 'History', icon: 'receipt', group: 'account' },
-  { id: 'loyalty',   label: 'Loyalty', icon: 'medal', group: 'account' },
+  { id: 'dashboard', icon: 'home',     group: 'main'    },
+  { id: 'booking',   icon: 'calendar', group: 'main'    },
+  { id: 'services',  icon: 'layers',   group: 'main'    },
+  { id: 'garage',    icon: 'car',      group: 'account' },
+  { id: 'history',   icon: 'receipt',  group: 'account' },
+  { id: 'loyalty',   icon: 'medal',    group: 'account' },
 ];
 
 function App() {
   const [state, setState] = useState(() => loadState());
   const [routeArg, setRouteArg] = useState(null);
+  const [langOpen, setLangOpen] = useState(false);
+
+  const lang = state.lang || 'en';
 
   useEffect(() => {
     document.documentElement.setAttribute('data-theme', state.theme);
+    document.documentElement.setAttribute('lang', lang);
     saveState(state);
-  }, [state]);
+  }, [state, lang]);
 
   const setRoute = useCallback((id, arg = null) => {
     setRouteArg(arg);
@@ -7818,7 +7914,7 @@ function App() {
   }, []);
 
   const toggleTheme = () => setState(s => ({ ...s, theme: s.theme === 'dark' ? 'light' : 'dark' }));
-
+  const setLang = (l) => { setState(s => ({ ...s, lang: l })); setLangOpen(false); };
   const dismissToast = (id) => setState(s => ({ ...s, toasts: s.toasts.filter(t => t.id !== id) }));
 
   const spend = totalSpend(state.history);
@@ -7826,12 +7922,12 @@ function App() {
   const upcomingCount = state.bookings.filter(b => b.date >= new Date().toISOString().slice(0,10)).length;
 
   const headings = {
-    dashboard: { title: 'Dashboard', sub: 'Overview of your account' },
-    booking:   { title: 'Book a slot', sub: 'Schedule, edit or cancel' },
-    services:  { title: 'Services', sub: 'Alloy restoration & tires' },
-    garage:    { title: 'My garage', sub: 'Profile & vehicles' },
-    history:   { title: 'History', sub: 'Work log & spending' },
-    loyalty:   { title: 'Loyalty', sub: 'Tiers, points, referrals' },
+    dashboard: { title: t(lang,'page.dashboard.title'), sub: t(lang,'page.dashboard.sub') },
+    booking:   { title: t(lang,'page.booking.title'),   sub: t(lang,'page.booking.sub')   },
+    services:  { title: t(lang,'page.services.title'),  sub: t(lang,'page.services.sub')  },
+    garage:    { title: t(lang,'page.garage.title'),    sub: t(lang,'page.garage.sub')    },
+    history:   { title: t(lang,'page.history.title'),   sub: t(lang,'page.history.sub')   },
+    loyalty:   { title: t(lang,'page.loyalty.title'),   sub: t(lang,'page.loyalty.sub')   },
   };
   const h = headings[state.route] || headings.dashboard;
 
@@ -7846,27 +7942,27 @@ function App() {
           </div>
         </div>
 
-        <div className="nav-label">Workshop</div>
+        <div className="nav-label">{t(lang,'nav.workshop')}</div>
         <div className="nav">
           {NAV.filter(n => n.group === 'main').map(n => (
             <button key={n.id}
               className={`nav-item ${state.route === n.id ? 'active' : ''}`}
               onClick={() => setRoute(n.id)}>
               <span className="nav-icon"><Icon name={n.icon} size={17}/></span>
-              {n.label}
+              {t(lang, 'nav.' + n.id)}
               {n.id === 'booking' && upcomingCount > 0 && <span className="nav-badge">{upcomingCount}</span>}
             </button>
           ))}
         </div>
 
-        <div className="nav-label">Account</div>
+        <div className="nav-label">{t(lang,'nav.account')}</div>
         <div className="nav">
           {NAV.filter(n => n.group === 'account').map(n => (
             <button key={n.id}
               className={`nav-item ${state.route === n.id ? 'active' : ''}`}
               onClick={() => setRoute(n.id)}>
               <span className="nav-icon"><Icon name={n.icon} size={17}/></span>
-              {n.label}
+              {t(lang, 'nav.' + n.id)}
             </button>
           ))}
         </div>
@@ -7876,7 +7972,7 @@ function App() {
             <div className="avatar">{state.user.name.split(' ').map(p => p[0]).join('')}</div>
             <div style={{ flex: 1, minWidth: 0 }}>
               <div className="user-name">{state.user.name}</div>
-              <div className="user-tier">{tier.name} · {tier.discount}% off</div>
+              <div className="user-tier">{tier.name} · {tier.discount}% {t(lang,'c.off')}</div>
             </div>
           </div>
         </div>
@@ -7889,19 +7985,55 @@ function App() {
             <div className="topbar-sub">{h.sub}</div>
           </div>
           <div className="topbar-spacer"/>
-          <button className="icon-btn" title="Notifications"><Icon name="bell"/></button>
-          <button className="icon-btn" title="Toggle theme" onClick={toggleTheme}>
+
+          {/* Language picker */}
+          <div style={{ position: 'relative' }}>
+            <button className="icon-btn lang-btn" title={t(lang,'c.language')}
+              onClick={() => setLangOpen(o => !o)}
+              style={{ display: 'flex', alignItems: 'center', gap: 4, padding: '6px 10px', fontSize: 12, fontWeight: 600 }}>
+              <Icon name="globe" size={14}/>
+              {LANG_CODE[lang]}
+              <Icon name="chevron-down" size={11}/>
+            </button>
+            {langOpen && (
+              <>
+                <div onClick={() => setLangOpen(false)} style={{ position: 'fixed', inset: 0, zIndex: 25 }}/>
+                <div style={{
+                  position: 'absolute', right: 0, top: 'calc(100% + 6px)', zIndex: 30,
+                  background: 'var(--surface)', border: '1px solid var(--border)',
+                  borderRadius: 10, boxShadow: '0 8px 24px rgba(0,0,0,.12)',
+                  minWidth: 150, overflow: 'hidden',
+                }}>
+                  {Object.keys(LANG_LABEL).map(l => (
+                    <button key={l} onClick={() => setLang(l)} style={{
+                      display: 'flex', alignItems: 'center', gap: 10,
+                      width: '100%', padding: '10px 14px', textAlign: 'left',
+                      background: l === lang ? 'var(--surface-2)' : 'transparent',
+                      border: 'none', cursor: 'pointer', fontSize: 13, color: 'var(--ink)',
+                    }}>
+                      <span style={{ fontWeight: 700, fontSize: 11, color: 'var(--muted)', minWidth: 22 }}>{LANG_CODE[l]}</span>
+                      <span>{LANG_LABEL[l]}</span>
+                      {l === lang && <span style={{ marginLeft: 'auto', color: 'var(--primary)' }}>✓</span>}
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
+          </div>
+
+          <button className="icon-btn" title={t(lang,'c.notifications')}><Icon name="bell"/></button>
+          <button className="icon-btn" title={t(lang,'c.toggleTheme')} onClick={toggleTheme}>
             <Icon name={state.theme === 'dark' ? 'sun' : 'moon'}/>
           </button>
-          <Button kind="primary" icon="plus" onClick={() => setRoute('booking')}>New booking</Button>
+          <Button kind="primary" icon="plus" onClick={() => setRoute('booking')}>{t(lang,'c.newBooking')}</Button>
         </header>
 
-        {state.route === 'dashboard' && <DashboardView state={state} setRoute={setRoute} setState={setState}/>}
-        {state.route === 'booking'   && <BookingView state={state} setRoute={setRoute} setState={setState} initial={routeArg}/>}
-        {state.route === 'services'  && <ServicesView setRoute={setRoute}/>}
-        {state.route === 'garage'    && <GarageView state={state} setState={setState}/>}
-        {state.route === 'history'   && <HistoryView state={state}/>}
-        {state.route === 'loyalty'   && <LoyaltyView state={state}/>}
+        {state.route === 'dashboard' && <DashboardView state={state} setRoute={setRoute} setState={setState} lang={lang}/>}
+        {state.route === 'booking'   && <BookingView   state={state} setRoute={setRoute} setState={setState} initial={routeArg} lang={lang}/>}
+        {state.route === 'services'  && <ServicesView  setRoute={setRoute} lang={lang}/>}
+        {state.route === 'garage'    && <GarageView    state={state} setState={setState} lang={lang}/>}
+        {state.route === 'history'   && <HistoryView   state={state} lang={lang}/>}
+        {state.route === 'loyalty'   && <LoyaltyView   state={state} lang={lang}/>}
       </main>
 
       <Toasts items={state.toasts} onDismiss={dismissToast}/>
